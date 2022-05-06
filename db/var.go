@@ -1,33 +1,13 @@
 package db
 
 import (
-	"errors"
-
 	"github.com/jinzhu/gorm"
 )
 
 type Operator struct {
-	gorm.Model
+	ID       uint `gorm:"primary_key:uniq"`
 	Username string
 	Token    string
-}
-
-type DB_Manage interface {
-	Add(*gorm.DB) error
-	Change(*gorm.DB) error
-	Del(*gorm.DB) error
-}
-
-func NewOperator(username string, token string) (op *Operator, err error) {
-	if username == "" && token == "" {
-		err = errors.New("missing data")
-		return nil, err
-	}
-	op = &Operator{
-		Username: username,
-		Token:    token,
-	}
-	return
 }
 
 func (oper *Operator) Add(db *gorm.DB) error {
@@ -51,8 +31,8 @@ func (oper *Operator) Del(db *gorm.DB) error {
 }
 
 type Client struct {
-	gorm.Model
-	Id        string
+	Id        uint
+	Id_string string `gorm:"primary_key:uniq"`
 	Firstname string
 	Lastname  string
 	Operator  string //Ввести Operator.Username
@@ -84,15 +64,19 @@ func (client *Client) Del(db *gorm.DB) error {
 }
 
 type Order struct {
-	gorm.Model
-	Client_id  string //Принимает Client.Id
-	Message_ID string //Принимает Message.Id
+	ID         uint
+	Client_id  string `gorm:"primary_key;uniq"` //Принимает Client.Id
+	Message_ID string `gorm:"primary_key:uniq"` //Принимает Message.Id
 	Status     string
 }
 
+func (ord Order) Add(db *gorm.DB) error {
+	return nil
+}
+
 type Message struct {
-	gorm.Model
-	Id    string //Принимает Order.Message_ID
+	ID    uint
+	Id    string `gorm:"primary_key"` //Принимает Order.Message_ID
 	Title string
 	To    string
 	Body  string
