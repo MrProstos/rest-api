@@ -1,24 +1,16 @@
 package db_test
 
 import (
-	"fmt"
+	"log"
 	"testing"
 
 	"github.com/MrProstos/rest-api/db"
 )
 
-func TestNewOperator(t *testing.T) {
-	s, err := db.NewOperator("test", "token")
-	fmt.Println(s, err)
-}
-
 func TestOperator(t *testing.T) {
-	str, err := db.NewOperator("vlad1", "token1")
-	if err != nil {
-		t.Error(err)
-	}
+	str := db.Operator{Username: "vlad1", Token: "token1"}
 
-	err = str.Add(db.DB)
+	err := str.Add(db.DB)
 	if err != nil {
 		t.Error(err)
 	}
@@ -27,4 +19,17 @@ func TestOperator(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+}
+
+func TestClient(t *testing.T) {
+	str := db.Client{
+		Id_string: "123632",
+		Firstname: "vlad",
+		Lastname:  "mikgin",
+		Operator:  "MTC",
+	}
+	if err := str.Add(db.DB); err != nil {
+		log.Fatal(err)
+	}
+
 }
