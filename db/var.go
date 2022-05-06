@@ -6,6 +6,15 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+var (
+	Db_name string = "Users"
+	Db_pass string = "changeme"
+	Db_user string = "postgres"
+	Db_type string = "postgres"
+	Db_host string = "localhost"
+	//db_port int    = 5434
+)
+
 type Operator struct {
 	Username string
 	Token    string
