@@ -7,6 +7,7 @@ import (
 )
 
 type Operator struct {
+	gorm.Model
 	Username string
 	Token    string
 }
@@ -23,18 +24,28 @@ func NewOperator(username string, token string) (op *Operator, err error) {
 	return
 }
 
-func (oper *Operator) Add(db *gorm.DB) string {
-	db.AutoMigrate(oper)
-	db.Create(oper)
-	return "Success"
+func (oper *Operator) Add(db *gorm.DB) error {
+	db = db.AutoMigrate(&oper)
+	if db.Error != nil {
+		return db.Error
+	}
+	db = db.Create(&oper)
+	if db.Error != nil {
+		return db.Error
+	}
+	return nil
 }
 
-func (oper *Operator) Del(db *gorm.DB) string {
-	db.Delete(oper)
-	return "Success"
+func (oper *Operator) Del(db *gorm.DB) error {
+	db = db.Delete(&oper, 1)
+	if db.Error != nil {
+		return db.Error
+	}
+	return nil
 }
 
 type Client struct {
+	gorm.Model
 	Id        string
 	Firstname string
 	Lastname  string
@@ -42,12 +53,14 @@ type Client struct {
 }
 
 type Order struct {
+	gorm.Model
 	Client_id  string //Принимает Client.Id
 	Message_ID string //Принимает Message.Id
 	Status     string
 }
 
 type Message struct {
+	gorm.Model
 	Id    string //Принимает Order.Message_ID
 	Title string
 	To    string
