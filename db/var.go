@@ -12,6 +12,12 @@ type Operator struct {
 	Token    string
 }
 
+type DB_Manage interface {
+	Add(*gorm.DB) error
+	Change(*gorm.DB) error
+	Del(*gorm.DB) error
+}
+
 func NewOperator(username string, token string) (op *Operator, err error) {
 	if username == "" && token == "" {
 		err = errors.New("missing data")
@@ -50,6 +56,31 @@ type Client struct {
 	Firstname string
 	Lastname  string
 	Operator  string //Ввести Operator.Username
+}
+
+func (client *Client) Add(db *gorm.DB) error {
+	db = db.AutoMigrate(&client)
+	if db.Error != nil {
+		return db.Error
+	}
+	db = db.Create(&client)
+	if db.Error != nil {
+		return db.Error
+	}
+	return nil
+}
+
+func (client *Client) Change(db *gorm.DB) error {
+
+	return nil
+}
+
+func (client *Client) Del(db *gorm.DB) error {
+	db = db.Delete(&client, 1)
+	if db.Error != nil {
+		return db.Error
+	}
+	return nil
 }
 
 type Order struct {

@@ -23,7 +23,7 @@ func TestOperator(t *testing.T) {
 		t.Error(err)
 	}
 
-	err = str.Del(db.DB)
+	err = str.Del(db.DB) // Проверить на счет нескольких удалений
 	if err != nil {
 		t.Error(err)
 	}
