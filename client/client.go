@@ -17,7 +17,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	req, err := http.Post("http://localhost:9999/newuser", "application/json", bytes.NewBuffer(strJSON))
+	req, err := http.Post("http://localhost:9999/user/newuser", "application/json", bytes.NewBuffer(strJSON))
 	if err != nil {
 		log.Fatal(err)
 	}
