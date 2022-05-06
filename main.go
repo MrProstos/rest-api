@@ -7,5 +7,12 @@ import (
 )
 
 func main() {
-	fmt.Println(db.DB)
+	o := db.Operator{Username: "MTC", Token: "123"}
+	s := db.Client{
+		Id:        "1",
+		Firstname: "Test",
+		Lastname:  "asd",
+		Operator:  o.Username,
+	}
+	fmt.Println(s)
 }

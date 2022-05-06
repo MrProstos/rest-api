@@ -38,12 +38,12 @@ type Client struct {
 	Id        string
 	Firstname string
 	Lastname  string
-	Operator  *Operator
+	Operator  string //Ввести Operator.Username
 }
 
 type Order struct {
-	Client     *Client  //Принимает Client.Id
-	Message_ID *Message //Принимает Message.Id
+	Client_id  string //Принимает Client.Id
+	Message_ID string //Принимает Message.Id
 	Status     string
 }
 
