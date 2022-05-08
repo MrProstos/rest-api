@@ -5,7 +5,7 @@ import (
 )
 
 type Operator struct {
-	ID       uint `gorm:"primary_key:uniq"`
+	ID       uint
 	Username string
 	Token    string
 }
@@ -18,6 +18,14 @@ func (oper *Operator) Add(db *gorm.DB) error {
 	db = db.Create(&oper)
 	if db.Error != nil {
 		return db.Error
+	}
+	return nil
+}
+
+func (oper *Operator) Update(data *Operator, db *gorm.DB) error {
+	err := db.Model(&oper).Update(data)
+	if err.Error != nil {
+		return err.Error
 	}
 	return nil
 }

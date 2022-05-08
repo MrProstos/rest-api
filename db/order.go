@@ -3,12 +3,23 @@ package db
 import "github.com/jinzhu/gorm"
 
 type Order struct {
-	ID         uint
-	Client_id  string `gorm:"primary_key;uniq"` //Принимает Client.Id
-	Message_ID string `gorm:"primary_key:uniq"` //Принимает Message.Id
-	Status     string
+	ID        uint
+	Client_id string `gorm:"foreignKey"`
+	Title     string
+	To        string
+	Body      string
+	Status    string
 }
 
 func (ord Order) Add(db *gorm.DB) error {
+	db = db.AutoMigrate(&ord)
+	if db.Error != nil {
+		return db.Error
+	}
+	db = db.Create(&ord)
+	if db.Error != nil {
+		return db.Error
+	}
 	return nil
+
 }

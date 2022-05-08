@@ -4,7 +4,7 @@ import "github.com/jinzhu/gorm"
 
 type Client struct {
 	Id        uint
-	Id_string string `gorm:"primary_key:uniq"`
+	Id_string string `gorm:"foreignKey:OrderRever"`
 	Firstname string
 	Lastname  string
 	Operator  string //Ввести Operator.Username
@@ -22,7 +22,7 @@ func (client *Client) Add(db *gorm.DB) error {
 	return nil
 }
 
-func (client *Client) Change(db *gorm.DB) error {
+func (client *Client) Update(db *gorm.DB) error {
 
 	return nil
 }
