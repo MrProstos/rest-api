@@ -22,9 +22,13 @@ func (client *Client) Add(db *gorm.DB) error {
 	return nil
 }
 
-func (client *Client) Update(db *gorm.DB) error {
-
+func (client *Client) Update(data *Operator, db *gorm.DB) error {
+	err := db.Model(&client).Update(data)
+	if err.Error != nil {
+		return err.Error
+	}
 	return nil
+
 }
 
 func (client *Client) Del(db *gorm.DB) error {
