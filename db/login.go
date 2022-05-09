@@ -11,7 +11,7 @@ import (
 var DB *gorm.DB
 
 var (
-	db_name string = "Users"
+	db_name string = "postgres"
 	db_pass string = "changeme"
 	db_user string = "postgres"
 	db_type string = "postgres"
