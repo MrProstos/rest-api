@@ -1,6 +1,7 @@
 package db_test
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/MrProstos/rest-api/db"
@@ -38,6 +39,17 @@ func TestAdd(t *testing.T) {
 }
 
 func TestUpdate(t *testing.T) {
+	oper := db.Operator{
+		Username: "vlad1",
+	}
+	client := db.Client{
+		Id_string: "123632",
+	}
+	ord := db.Order{
+		Client_id: "123",
+		Title:     "asd",
+	}
+	fmt.Println(oper, client, ord)
 
 }
 
