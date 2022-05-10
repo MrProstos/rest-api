@@ -3,12 +3,13 @@ package db
 import "github.com/jinzhu/gorm"
 
 type Order struct {
-	ID        uint
-	Client_id string `gorm:"foreignKey"`
-	Title     string
-	To        string
-	Body      string
-	Status    string
+	ID           uint
+	Client_id    string `gorm:"foreignKey"`
+	Phone_number int
+	Title        string
+	To           string
+	Body         string
+	Status       string
 }
 
 func (ord Order) Add(db *gorm.DB) error {
