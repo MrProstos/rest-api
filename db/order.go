@@ -3,13 +3,11 @@ package db
 import "github.com/jinzhu/gorm"
 
 type Order struct {
-	ID           uint
-	Client_id    string `gorm:"foreignKey"`
-	Phone_number int
-	Title        string
-	To           string
-	Body         string
-	Status       string
+	Client_id uint `gorm:"primaryKey"`
+	Title     string
+	To        string
+	Body      string
+	Status    uint
 }
 
 func (ord Order) Add(db *gorm.DB) error {
@@ -24,7 +22,7 @@ func (ord Order) Add(db *gorm.DB) error {
 	return nil
 }
 
-func (ord Order) Update(data *Operator, db *gorm.DB) error {
+func (ord Order) Update(data *Order, db *gorm.DB) error {
 	err := db.Model(&ord).Update(data)
 	if err.Error != nil {
 		return err.Error

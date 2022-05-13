@@ -1,13 +1,17 @@
 package db
 
-import "github.com/jinzhu/gorm"
+import (
+	"time"
+
+	"github.com/jinzhu/gorm"
+)
 
 type Client struct {
-	Id        uint
-	Id_string string `gorm:"foreignKey:OrderRever"`
-	Firstname string
-	Lastname  string
-	Operator  string //Ввести Operator.Username
+	Client_id    uint   `gorm:"primaryKey"`
+	Phone_number int    `gorm:"unique;not null"`
+	Firstname    string `gorm:"not null"`
+	Lastname     string `gorm:"not null"`
+	Birthday     *time.Time
 }
 
 func (client *Client) Add(db *gorm.DB) error {
@@ -22,7 +26,7 @@ func (client *Client) Add(db *gorm.DB) error {
 	return nil
 }
 
-func (client *Client) Update(data *Operator, db *gorm.DB) error {
+func (client *Client) Update(data *Client, db *gorm.DB) error {
 	err := db.Model(&client).Update(data)
 	if err.Error != nil {
 		return err.Error
