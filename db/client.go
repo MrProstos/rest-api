@@ -12,10 +12,6 @@ type Client struct {
 }
 
 func (client *Client) Add(db *gorm.DB) error {
-	db = db.AutoMigrate(&client)
-	if db.Error != nil {
-		return db.Error
-	}
 	db = db.Create(&client)
 	if db.Error != nil {
 		return db.Error
