@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"time"
@@ -19,14 +20,14 @@ func main() {
 	}
 
 	for {
-		_, err := http.Post("http://localhost:2000/client/", "application/json", bytes.NewBuffer(strJSON))
+		body, err := http.Post("http://localhost:2000/addclient/", "application/json", bytes.NewBuffer(strJSON))
 		if err != nil {
 			fmt.Println("Ожидание сервера...")
 			time.Sleep(3 * time.Second)
 			continue
 		}
+		b, _ := ioutil.ReadAll(body.Body)
+		fmt.Println(string(b))
 		break
 	}
-	fmt.Println("Запрос дошёл!")
-
 }
