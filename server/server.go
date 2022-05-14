@@ -1,4 +1,4 @@
-package main
+package server
 
 import (
 	"encoding/json"
@@ -8,10 +8,9 @@ import (
 	"net/http"
 
 	"github.com/MrProstos/rest-api/db"
-	"github.com/gorilla/mux"
 )
 
-func enterClient(w http.ResponseWriter, r *http.Request) {
+func EnterClient(w http.ResponseWriter, r *http.Request) {
 	msg, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		log.Println(err)
@@ -28,14 +27,4 @@ func enterClient(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		fmt.Fprint(w, err.Error())
 	}
-}
-
-func main() {
-	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/addclient/", enterClient).Methods("POST")
-	err := http.ListenAndServe(":2000", router)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println("Server starting...")
 }
