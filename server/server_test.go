@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"testing"
 )
@@ -19,13 +18,31 @@ func TestEnterClient(t *testing.T) {
 	}
 	strJSON, err := json.Marshal(userData)
 	if err != nil {
-		log.Fatal(err)
+		t.Error(err)
 	}
 	body, err := http.Post("http://localhost:2000/addclient/", "application/json", bytes.NewBuffer(strJSON))
 	if err != nil {
-		log.Fatal(err)
+		t.Error(err)
 	}
 	b, _ := ioutil.ReadAll(body.Body)
 	fmt.Println(string(b))
 
+}
+
+func TestEnterOrder(t *testing.T) {
+	orderData := map[string]interface{}{
+		"Client_id": 3,
+	}
+
+	strJSON, err := json.Marshal(orderData)
+	if err != nil {
+		t.Error(err)
+	}
+
+	body, err := http.Post("http://localhost:2000/addorder/", "application/json", bytes.NewBuffer(strJSON))
+	if err != nil {
+		t.Error(err)
+	}
+	b, _ := ioutil.ReadAll(body.Body)
+	fmt.Println(string(b))
 }
