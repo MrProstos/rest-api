@@ -3,7 +3,7 @@ package db
 import "github.com/jinzhu/gorm"
 
 type Order struct {
-	Client_id uint `gorm:"primaryKey"`
+	Client_id uint
 	Title     string
 	To        string
 	Body      string
@@ -11,10 +11,6 @@ type Order struct {
 }
 
 func (ord Order) Add(db *gorm.DB) error {
-	db = db.AutoMigrate(&ord)
-	if db.Error != nil {
-		return db.Error
-	}
 	db = db.Create(&ord)
 	if db.Error != nil {
 		return db.Error
