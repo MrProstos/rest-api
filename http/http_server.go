@@ -11,30 +11,28 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func getInfo(w http.ResponseWriter, r *http.Request) {
-	err := r.ParseForm()
-	if err != nil {
-		log.Fatal(err)
-	}
-
+func enterClient(w http.ResponseWriter, r *http.Request) {
 	msg, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		fmt.Fprint(w, err.Error())
 	}
 	var client db.Client
 
 	err = json.Unmarshal(msg, &client)
 	if err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		fmt.Fprint(w, err.Error())
 	}
 	if err := client.Add(db.DB); err != nil {
-		log.Fatal(err)
+		log.Println(err)
+		fmt.Fprint(w, err.Error())
 	}
 }
 
 func main() {
 	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/client/", getInfo).Methods("POST")
+	router.HandleFunc("/addclient/", enterClient).Methods("POST")
 	err := http.ListenAndServe(":2000", router)
 	if err != nil {
 		log.Fatal(err)
