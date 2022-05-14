@@ -1,17 +1,15 @@
 package db
 
 import (
-	"time"
-
 	"github.com/jinzhu/gorm"
 )
 
 type Client struct {
-	Client_id    uint   `gorm:"primaryKey"`
-	Phone_number int    `gorm:"unique;not null"`
-	Firstname    string `gorm:"not null"`
-	Lastname     string `gorm:"not null"`
-	Birthday     *time.Time
+	client_id uint
+	Phone_num string
+	Firstname string
+	Lastname  string
+	Birthday  string
 }
 
 func (client *Client) Add(db *gorm.DB) error {
