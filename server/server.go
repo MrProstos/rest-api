@@ -28,3 +28,22 @@ func EnterClient(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, err.Error())
 	}
 }
+
+func EnterOrder(w http.ResponseWriter, r *http.Request) {
+	msg, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Println(err)
+		fmt.Fprint(w, err.Error())
+	}
+	var order db.Order
+
+	err = json.Unmarshal(msg, &order)
+	if err != nil {
+		log.Println(err)
+		fmt.Fprint(w, err.Error())
+	}
+	if err := order.Add(db.DB); err != nil {
+		log.Println(err)
+		fmt.Fprint(w, err.Error())
+	}
+}

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 
@@ -10,11 +9,13 @@ import (
 )
 
 func main() {
+
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/addclient/", server.EnterClient).Methods("POST")
+	router.HandleFunc("/addorder/", server.EnterOrder).Methods("POST")
 	err := http.ListenAndServe(":2000", router)
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println("Server starting...")
+	log.Println("Server starting...")
 }
