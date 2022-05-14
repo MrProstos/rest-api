@@ -5,7 +5,6 @@ import (
 )
 
 type Client struct {
-	client_id uint
 	Phone_num string
 	Firstname string
 	Lastname  string
