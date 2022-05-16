@@ -11,21 +11,27 @@ import (
 
 func TestEnterClient(t *testing.T) {
 	userData := map[string]interface{}{
-		"Phone_num": "89208823212",
+		"Phone_num": "123456789",
 		"Firstname": "vlad",
 		"Lastname":  "mikhin",
-		"Birthday":  "22-07-1999",
 	}
+
 	strJSON, err := json.Marshal(userData)
 	if err != nil {
 		t.Error(err)
+		t.Failed()
 	}
+
 	body, err := http.Post("http://localhost:2000/addclient/", "application/json", bytes.NewBuffer(strJSON))
 	if err != nil {
 		t.Error(err)
 	}
 	b, _ := ioutil.ReadAll(body.Body)
-	fmt.Println(string(b))
+	if string(b) != "Succses!" {
+		t.Error(string(b))
+	} else {
+		fmt.Println(string(b))
+	}
 
 }
 
@@ -44,5 +50,9 @@ func TestEnterOrder(t *testing.T) {
 		t.Error(err)
 	}
 	b, _ := ioutil.ReadAll(body.Body)
-	fmt.Println(string(b))
+	if string(b) != "Succses!" {
+		t.Error(string(b))
+	} else {
+		fmt.Println(string(b))
+	}
 }

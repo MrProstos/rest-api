@@ -3,7 +3,7 @@ package db
 import "github.com/jinzhu/gorm"
 
 type Order struct {
-	Client_id uint
+	Client_id uint `gorm:"not null"`
 	Title     string
 	To        string
 	Body      string
