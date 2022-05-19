@@ -17,13 +17,13 @@ func AddClient(w http.ResponseWriter, r *http.Request) {
 	err := decoder.Decode(&client)
 	if err != nil {
 		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	if err := db.Db_manage.Add(client); err != nil {
 		log.Println(err)
-		http.Error(w, err.Error(), http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
@@ -44,9 +44,10 @@ func UpdateClient(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
-	} else {
-		fmt.Fprint(w, "Succses!")
 	}
+
+	fmt.Fprint(w, http.StatusOK)
+
 }
 
 func EnterOrder(w http.ResponseWriter, r *http.Request) {

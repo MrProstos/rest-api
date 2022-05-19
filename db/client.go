@@ -5,6 +5,7 @@ import (
 )
 
 type Db_manage interface {
+	IsValid() error
 	Add() error
 	Update() error
 	Del() error
@@ -20,7 +21,7 @@ type Client struct {
 
 func (client *Client) IsValid() error {
 	if len(client.Firstname) == 0 || len(client.Lastname) == 0 || len(client.Phone_num) == 0 {
-		return errors.New("fields Phone_num, Firstname, Lastname are required")
+		return errors.New("fields phone_num, firstname, lastname, birthday are required")
 	}
 	return nil
 }
@@ -42,23 +43,21 @@ func (client *Client) Update() error {
 		return err
 	}
 
-	data := new(Client)
-
 	db := GetDB()
-	err := db.First(&data, "id = ?", client.ID)
-	if err.Error != nil {
-		return err.Error
+	if db.Error != nil {
+		return db.Error
 	}
 
+	data := new(Client)
+	data.ID = client.ID
+
+	db.First(&data)
 	data.Phone_num = client.Phone_num
 	data.Firstname = client.Firstname
 	data.Lastname = client.Lastname
 	data.Birthday = client.Birthday
+	db.Save(&data)
 
-	err = db.Save(&data)
-	if err.Error != nil {
-		return err.Error
-	}
 	return nil
 }
 
