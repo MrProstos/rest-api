@@ -10,7 +10,7 @@ import (
 	"github.com/MrProstos/rest-api/db"
 )
 
-func EnterClient(w http.ResponseWriter, r *http.Request) {
+func AddClient(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 
 	client := new(db.Client)
@@ -40,6 +40,7 @@ func UpdateClient(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 
 	}
+
 }
 
 func EnterOrder(w http.ResponseWriter, r *http.Request) {
