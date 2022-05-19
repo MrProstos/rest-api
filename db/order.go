@@ -1,33 +1,45 @@
 package db
 
-import "github.com/jinzhu/gorm"
+import (
+	"errors"
+)
 
 type Order struct {
-	Client_id uint `gorm:"not null"`
+	Client_id uint
 	Title     string
 	To        string
 	Body      string
 	Status    uint
 }
 
-func (ord Order) Add(db *gorm.DB) error {
-	db = db.Create(&ord)
+func (ord Order) IsValid() error {
+	if ord.Client_id == 0 && ord.Status == 0 {
+		return errors.New("fields Client_id, Status are required")
+	}
+	return nil
+}
+
+func (ord Order) Add() error {
+	if err := ord.IsValid(); err != nil {
+		return err
+	}
+	db := GetDB().Create(&ord)
 	if db.Error != nil {
 		return db.Error
 	}
 	return nil
 }
 
-func (ord Order) Update(data *Order, db *gorm.DB) error {
-	err := db.Model(&ord).Update(data)
+func (ord Order) Update() error {
+	err := GetDB().Model(&ord).Update(ord)
 	if err.Error != nil {
 		return err.Error
 	}
 	return nil
 }
 
-func (ord *Order) Del(db *gorm.DB) error {
-	db = db.Delete(&ord, 1)
+func (ord *Order) Del() error {
+	db := GetDB().Delete(&ord, 1)
 	if db.Error != nil {
 		return db.Error
 	}

@@ -11,7 +11,7 @@ import (
 var DB *gorm.DB
 
 var (
-	db_name string = "studies"
+	db_name string = "postgres"
 	db_pass string = "changeme"
 	db_user string = "postgres"
 	db_type string = "postgres"
@@ -28,4 +28,10 @@ func init() {
 	}
 
 	DB = conn
+	DB.AutoMigrate(&Client{}, &Order{})
+}
+
+// возвращает дескриптор объекта DB
+func GetDB() *gorm.DB {
+	return DB
 }

@@ -7,15 +7,14 @@ import (
 	"io/ioutil"
 	"net/http"
 	"testing"
-
-	"github.com/MrProstos/rest-api/db"
 )
 
 func TestAddClient(t *testing.T) {
 	userData := map[string]interface{}{
-		"Phone_num": "252",
-		"Firstname": "test",
-		"Lastname":  "test",
+		"phone_num": "111",
+		"firstname": "test",
+		"lastname":  "test",
+		"birthday":  "1-1-2000",
 	}
 
 	strJSON, err := json.Marshal(userData)
@@ -38,20 +37,14 @@ func TestAddClient(t *testing.T) {
 
 func TestUpdateClient(t *testing.T) {
 	userData := map[string]interface{}{
-		"Client_id": 4,
-		"Phone_num": "3234",
-		"Firstname": "vlad",
-		"Lastname":  "mikhin",
+		"id":        1,
+		"phone_num": "777",
+		"firstname": "vlad",
+		"lastname":  "mikhin",
+		"birthday":  "22.02.22",
 	}
 
 	strJSON, err := json.Marshal(userData)
-	if err != nil {
-		t.Error(err)
-	}
-
-	olddata, newdata := new(db.Client), new(db.Client)
-	fmt.Println(newdata)
-	err = json.Unmarshal(strJSON, &olddata)
 	if err != nil {
 		t.Error(err)
 	}
