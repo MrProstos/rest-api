@@ -36,11 +36,11 @@ func TestAddClient(t *testing.T) {
 
 func TestUpdateClient(t *testing.T) {
 	userData := map[string]interface{}{
-		"id":        9,
-		"phone_num": "0000",
-		"firstname": "0000",
-		"lastname":  "0000",
-		"birthday":  "0000",
+		"id":        22,
+		"phone_num": "xxx",
+		"firstname": "xxx",
+		"lastname":  "xxx",
+		"birthday":  "xxx",
 	}
 
 	strJSON, err := json.Marshal(userData)
