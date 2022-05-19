@@ -11,9 +11,9 @@ import (
 
 func TestAddClient(t *testing.T) {
 	userData := map[string]interface{}{
-		"phone_num": "111",
-		"firstname": "test",
-		"lastname":  "test",
+		"phone_num": "888",
+		"firstname": "vlad",
+		"lastname":  "vlad",
 		"birthday":  "1-1-2000",
 	}
 
@@ -27,12 +27,11 @@ func TestAddClient(t *testing.T) {
 		t.Error(err)
 	}
 	b, _ := ioutil.ReadAll(body.Body)
-	if string(b) != "Succses!" {
-		t.Error(string(b))
-	} else {
-		fmt.Println(string(b))
-	}
 
+	if string(b) != "200" {
+		t.Error(string(b))
+	}
+	fmt.Println(string(b))
 }
 
 func TestUpdateClient(t *testing.T) {

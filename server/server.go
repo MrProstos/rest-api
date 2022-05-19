@@ -11,7 +11,6 @@ import (
 )
 
 func AddClient(w http.ResponseWriter, r *http.Request) {
-
 	decoder := json.NewDecoder(r.Body)
 
 	client := new(db.Client)
@@ -22,14 +21,13 @@ func AddClient(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := client.Add(); err != nil {
+	if err := db.Db_manage.Add(client); err != nil {
 		log.Println(err)
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
-
-	} else {
-		fmt.Fprint(w, "Succses!")
 	}
+
+	fmt.Fprint(w, http.StatusOK)
 }
 
 func UpdateClient(w http.ResponseWriter, r *http.Request) {

@@ -12,10 +12,10 @@ type Db_manage interface {
 
 type Client struct {
 	ID        uint   `gorm:"primaryKey" json:"id"`
-	Phone_num string `gorm:"unique;type:varchar" json:"phone_num"`
-	Firstname string `gorm:"type:varchar" json:"firstname"`
-	Lastname  string `gorm:"type:varchar" json:"lastname"`
-	Birthday  string `gorm:"type:varchar" json:"birthday"`
+	Phone_num string `gorm:"unique;type:varchar;not null" json:"phone_num"`
+	Firstname string `gorm:"type:varchar;not null" json:"firstname"`
+	Lastname  string `gorm:"type:varchar;not null" json:"lastname"`
+	Birthday  string `gorm:"type:varchar;not null" json:"birthday"`
 }
 
 func (client *Client) IsValid() error {
