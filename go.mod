@@ -2,16 +2,25 @@ module github.com/MrProstos/rest-api
 
 go 1.18
 
-require github.com/google/uuid v1.3.0
+require gorm.io/gorm v1.23.5
 
 require (
-	github.com/766b/go-outliner v0.0.0-20180511142203-fc6edecdadd7 // indirect
+	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
+	github.com/jackc/pgconn v1.12.0 // indirect
+	github.com/jackc/pgio v1.0.0 // indirect
+	github.com/jackc/pgpassfile v1.0.0 // indirect
+	github.com/jackc/pgproto3/v2 v2.3.0 // indirect
+	github.com/jackc/pgservicefile v0.0.0-20200714003250-2b9c44734f2b // indirect
+	github.com/jackc/pgtype v1.11.0 // indirect
+	github.com/jackc/pgx/v4 v4.16.0 // indirect
+	github.com/jinzhu/now v1.1.5 // indirect
+	golang.org/x/crypto v0.0.0-20210921155107-089bfa567519 // indirect
+	golang.org/x/text v0.3.7 // indirect
+)
+
+require (
 	github.com/gorilla/mux v1.8.0
-	github.com/jinzhu/gorm v1.9.16 // indirect
 	github.com/jinzhu/inflection v1.0.0 // indirect
-	github.com/joho/godotenv v1.4.0 // indirect
-	github.com/lib/pq v1.1.1 // indirect
-	github.com/ramya-rao-a/go-outline v0.0.0-20210608161538-9736a4bde949 // indirect
-	golang.org/x/text v0.3.7
-	golang.org/x/tools v0.1.10 // indirect
+	github.com/lib/pq v1.10.6 // indirect
+	gorm.io/driver/postgres v1.3.5
 )
