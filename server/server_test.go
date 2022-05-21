@@ -7,13 +7,28 @@ import (
 	"io/ioutil"
 	"net/http"
 	"testing"
-
-	"github.com/MrProstos/rest-api/db"
 )
 
-func TestAddClient(t *testing.T) {
+type TestClient struct {
+	ID        uint
+	Phone_num string
+	Firstname string
+	Lastname  string
+	Birthday  string
+	OrderID   uint
+	Orders    []TestOrder
+}
 
-	array := []db.Client{{
+type TestOrder struct {
+	Client_id uint
+	Title     string
+	To        string
+	Body      string
+	Status    uint
+}
+
+func TestAddClient(t *testing.T) {
+	array := []TestClient{{
 		Phone_num: "777",
 		Firstname: "Vlad",
 		Lastname:  "Mikhin",
@@ -51,7 +66,7 @@ func TestAddClient(t *testing.T) {
 }
 
 func TestUpdateClient(t *testing.T) {
-	array := []db.Client{{
+	array := []TestClient{{
 		ID:        1,
 		Phone_num: "UPDAT1",
 		Firstname: "UPDATE",
@@ -93,7 +108,7 @@ func TestUpdateClient(t *testing.T) {
 }
 
 func TestDelClietn(t *testing.T) {
-	array := []db.Client{{
+	array := []TestClient{{
 		ID: 1,
 	}, {
 		ID: 2,
@@ -124,46 +139,7 @@ func TestDelClietn(t *testing.T) {
 }
 
 func TestAddOrder(t *testing.T) {
-	orderData := map[string]interface{}{
-		"Client_id": 3,
-	}
-
-	strJSON, err := json.Marshal(orderData)
-	if err != nil {
-		t.Error(err)
-	}
-
-	body, err := http.Post("http://localhost:2000/addorder/", "application/json", bytes.NewBuffer(strJSON))
-	if err != nil {
-		t.Error(err)
-	}
-	b, _ := ioutil.ReadAll(body.Body)
-	if string(b) != "200" {
-		t.Error(string(b))
-	} else {
-		fmt.Println(string(b))
-	}
 }
 
 func TestUpdateOrder(t *testing.T) {
-
-	orderData := map[string]interface{}{
-		"Client_id": 3,
-	}
-
-	strJSON, err := json.Marshal(orderData)
-	if err != nil {
-		t.Error(err)
-	}
-
-	body, err := http.Post("http://localhost:2000/updateorder/", "application/json", bytes.NewBuffer(strJSON))
-	if err != nil {
-		t.Error(err)
-	}
-	b, _ := ioutil.ReadAll(body.Body)
-	if string(b) != "200" {
-		t.Error(string(b))
-	} else {
-		fmt.Println(string(b))
-	}
 }

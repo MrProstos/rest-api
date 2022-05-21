@@ -5,7 +5,7 @@ import (
 )
 
 type Order struct {
-	Client_id int `gorm:"primaryKey"`
+	Client_id uint `gorm:"primaryKey"`
 	Title     string
 	To        string
 	Body      string

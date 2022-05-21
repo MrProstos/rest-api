@@ -19,6 +19,8 @@ type Client struct {
 	Firstname string `gorm:"type:varchar;not null" json:"firstname"`
 	Lastname  string `gorm:"type:varchar;not null" json:"lastname"`
 	Birthday  string `gorm:"type:varchar;not null" json:"birthday"`
+	OrderID   uint
+	Orders    []Order
 }
 
 //Проверка на валидность данных
