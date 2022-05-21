@@ -2,8 +2,8 @@ package db
 
 import (
 	"fmt"
-	"log"
 
+	"github.com/MrProstos/rest-api/utils"
 	"gorm.io/driver/postgres"
 
 	"gorm.io/gorm"
@@ -11,7 +11,7 @@ import (
 
 var DB *gorm.DB
 
-var (
+const (
 	db_name string = "postgres"
 	db_pass string = "changeme"
 	db_user string = "postgres"
@@ -25,7 +25,7 @@ func init() {
 
 	conn, err := gorm.Open(postgres.Open(dbUrl), &gorm.Config{})
 	if err != nil {
-		log.Fatal(err)
+		utils.Logger.Fatal(err.Error())
 	}
 
 	DB = conn

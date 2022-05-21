@@ -10,7 +10,6 @@ import (
 
 func main() {
 
-	utils.InitLogger()
 	utils.Logger.Info("Start server!")
 	router := mux.NewRouter().StrictSlash(true)
 	router.HandleFunc("/addclient/", server.AddClient).Methods("POST")

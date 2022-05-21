@@ -3,10 +3,10 @@ package server
 import (
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
 
 	"github.com/MrProstos/rest-api/db"
+	"github.com/MrProstos/rest-api/utils"
 )
 
 func AddClient(w http.ResponseWriter, r *http.Request) {
@@ -15,13 +15,13 @@ func AddClient(w http.ResponseWriter, r *http.Request) {
 	client := new(db.Client)
 	err := decoder.Decode(&client)
 	if err != nil {
-		log.Println(err)
+		utils.Logger.Info(err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	if err := db.Db_manage.Add(client); err != nil {
-		log.Println(err)
+		utils.Logger.Info(err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -34,13 +34,13 @@ func UpdateClient(w http.ResponseWriter, r *http.Request) {
 
 	client := new(db.Client)
 	if err := decoder.Decode(&client); err != nil {
-		log.Println(err)
+		utils.Logger.Info(err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	if err := db.Db_manage.Update(client); err != nil {
-		log.Println(err)
+		utils.Logger.Info(err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -54,13 +54,13 @@ func DelClient(w http.ResponseWriter, r *http.Request) {
 
 	client := new(db.Client)
 	if err := decoder.Decode(&client); err != nil {
-		log.Println(err)
+		utils.Logger.Info(err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	if err := db.Db_manage.Del(client); err != nil {
-		log.Println(err)
+		utils.Logger.Info(err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -74,13 +74,13 @@ func AddOrder(w http.ResponseWriter, r *http.Request) {
 	order := new(db.Order)
 	err := decoder.Decode(&order)
 	if err != nil {
-		log.Println(err)
+		utils.Logger.Info(err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	if err := db.Db_manage.Add(order); err != nil {
-		log.Println(err)
+		utils.Logger.Info(err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -93,13 +93,13 @@ func UpdateOrder(w http.ResponseWriter, r *http.Request) {
 
 	order := new(db.Order)
 	if err := decoder.Decode(&order); err != nil {
-		log.Println(err)
+		utils.Logger.Info(err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	if err := db.Db_manage.Update(order); err != nil {
-		log.Println(err)
+		utils.Logger.Info(err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
@@ -113,13 +113,13 @@ func DelOrder(w http.ResponseWriter, r *http.Request) {
 
 	order := new(db.Order)
 	if err := decoder.Decode(&order); err != nil {
-		log.Println(err)
+		utils.Logger.Info(err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	if err := db.Db_manage.Del(order); err != nil {
-		log.Println(err)
+		utils.Logger.Info(err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
