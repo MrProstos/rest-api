@@ -19,6 +19,16 @@ func (ord Order) IsValid() error {
 	return nil
 }
 
+//SELECT * FROM orders WHERE client_id = ord.Client_id
+func (ord *Order) Show() error {
+	db := GetDB()
+	if err := db.Where("client_id = ?", ord.Client_id).First(&ord); err != nil {
+		return err.Error
+	}
+
+	return nil
+}
+
 func (ord *Order) Add() error {
 	if err := ord.IsValid(); err != nil {
 		return err
