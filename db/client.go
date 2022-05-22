@@ -7,6 +7,7 @@ import (
 //Интерфейс для управления базой данных
 type Db_manage interface {
 	IsValid() error //Проверка на валидность данных
+	Show() error    //Получить данные клиента по номеру телефона
 	Add() error     //Добавляет клиента в базу данных
 	Update() error  //Обновление данных клиента
 	Del() error     //Удаление клиента
@@ -18,15 +19,23 @@ type Client struct {
 	Phone_num string `gorm:"unique;type:varchar;not null" json:"phone_num"`
 	Firstname string `gorm:"type:varchar;not null" json:"firstname"`
 	Lastname  string `gorm:"type:varchar;not null" json:"lastname"`
-	Birthday  string `gorm:"type:varchar;not null" json:"birthday"`
-	OrderID   uint
-	Orders    []Order
+	Birthday  string `gorm:"type:varchar;not null" json:"birthday"` // Поменять на тип данных Date
+	//OrderID   uint
+	Orders []Order
 }
 
 //Проверка на валидность данных
 func (client *Client) IsValid() error {
 	if len(client.Firstname) == 0 || len(client.Lastname) == 0 || len(client.Phone_num) == 0 {
 		return errors.New("fields phone_num, firstname, lastname, birthday are required")
+	}
+	return nil
+}
+
+func (client *Client) Show() error {
+	db := GetDB()
+	if err := db.Where("phone_num = ?", client.Phone_num).First(&client); err != nil {
+		return err.Error
 	}
 	return nil
 }
