@@ -126,3 +126,5 @@
 {"level":"info","ts":"2022-05-23T00:04:28.058+0300","caller":"rest-api/main.go:13","msg":"Start server!"}
 {"level":"info","ts":"2022-05-23T00:06:22.863+0300","caller":"rest-api/main.go:13","msg":"Start server!"}
 {"level":"info","ts":"2022-05-23T00:06:56.380+0300","caller":"rest-api/main.go:13","msg":"Start server!"}
+{"level":"info","ts":"2022-05-23T01:40:55.843+0300","caller":"rest-api/main.go:18","msg":"Start server!"}
+{"level":"info","ts":"2022-05-23T01:42:49.025+0300","caller":"rest-api/main.go:18","msg":"Start server!"}

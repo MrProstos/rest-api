@@ -11,6 +11,10 @@ import (
 	"github.com/gorilla/mux"
 )
 
+func Login(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprint(w, "Login")
+}
+
 func ShowClients(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
