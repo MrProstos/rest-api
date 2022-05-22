@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"testing"
@@ -15,8 +16,8 @@ type TestClient struct {
 	Firstname string
 	Lastname  string
 	Birthday  string
-	OrderID   uint
-	Orders    []TestOrder
+	//OrderID   uint
+	Orders []TestOrder
 }
 
 type TestOrder struct {
@@ -27,12 +28,30 @@ type TestOrder struct {
 	Status    uint
 }
 
+func TestShowClietn(t *testing.T) {
+	body, err := http.Get("http://localhost:2000/showclietns/777")
+	if err != nil {
+		t.Error(err)
+	}
+
+	b, _ := io.ReadAll(body.Body)
+	fmt.Println(string(b))
+}
+
 func TestAddClient(t *testing.T) {
+	o := TestOrder{
+		Title:  "Vlad",
+		To:     "Vlad",
+		Body:   "Test",
+		Status: 0,
+	}
 	array := []TestClient{{
 		Phone_num: "777",
 		Firstname: "Vlad",
 		Lastname:  "Mikhin",
 		Birthday:  "1999-07-22",
+		//OrderID:   1,
+		Orders: []TestOrder{o},
 	}, {
 		Phone_num: "666",
 		Firstname: "Test",
