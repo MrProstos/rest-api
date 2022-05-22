@@ -7,7 +7,23 @@ import (
 
 	"github.com/MrProstos/rest-api/db"
 	"github.com/MrProstos/rest-api/utils"
+	"github.com/gorilla/mux"
 )
+
+func ShowClients(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	client := new(db.Client)
+	client.Phone_num = vars["phone_num"]
+
+	if err := db.Db_manage.Show(client); err != nil {
+		utils.Logger.Info(err.Error())
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	fmt.Fprintf(w, "%v %v", http.StatusOK, client)
+}
 
 func AddClient(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
