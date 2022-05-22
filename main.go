@@ -12,9 +12,11 @@ func main() {
 
 	utils.Logger.Info("Start server!")
 	router := mux.NewRouter().StrictSlash(true)
+	router.HandleFunc("/showclietns/{phone_num}", server.ShowClients).Methods("GET")
 	router.HandleFunc("/addclient/", server.AddClient).Methods("POST")
 	router.HandleFunc("/updateclient/", server.UpdateClient).Methods("PUT")
 	router.HandleFunc("/delclient/", server.DelClient).Methods("DELETE")
+	//router.HandleFunc("/showorder/{phone_num}", server.ShowClients).Methods("GET")
 	router.HandleFunc("/addorder/", server.AddOrder).Methods("POST")
 	router.HandleFunc("/updateorder/", server.UpdateOrder).Methods("PUT")
 	router.HandleFunc("/delorder/", server.DelOrder).Methods("DELETE")
