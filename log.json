@@ -46,4 +46,83 @@
     "ts": "2022-05-22T01:14:59.130+0300",
     "caller": "rest-api/main.go:13",
     "msg": "Start server!"
+}{
+    "level": "info",
+    "ts": "2022-05-22T16:11:00.809+0300",
+    "caller": "rest-api/main.go:13",
+    "msg": "Start server!"
 }
+{
+    "level": "info",
+    "ts": "2022-05-22T16:23:56.952+0300",
+    "caller": "rest-api/main.go:13",
+    "msg": "Start server!"
+}
+{
+    "level": "info",
+    "ts": "2022-05-22T16:24:39.319+0300",
+    "caller": "rest-api/main.go:13",
+    "msg": "Start server!"
+}
+{
+    "level": "error",
+    "ts": "2022-05-22T16:24:39.319+0300",
+    "caller": "rest-api/main.go:24",
+    "msg": "listen tcp :2000: bind: address already in use",
+    "stacktrace": "main.main\n\t/home/Vlad/MrProstos/rest-api/main.go:24\nruntime.main\n\t/usr/local/go/src/runtime/proc.go:250"
+}
+{
+    "level": "info",
+    "ts": "2022-05-22T16:29:45.544+0300",
+    "caller": "rest-api/main.go:13",
+    "msg": "Start server!"
+}
+{
+    "level": "info",
+    "ts": "2022-05-22T16:31:16.621+0300",
+    "caller": "rest-api/main.go:13",
+    "msg": "Start server!"
+}
+{
+    "level": "info",
+    "ts": "2022-05-22T16:33:00.692+0300",
+    "caller": "rest-api/main.go:13",
+    "msg": "Start server!"
+}
+{
+    "level": "info",
+    "ts": "2022-05-22T16:33:33.224+0300",
+    "caller": "rest-api/main.go:13",
+    "msg": "Start server!"
+}{
+    "level": "info",
+    "ts": "2022-05-22T16:34:57.437+0300",
+    "caller": "rest-api/main.go:13",
+    "msg": "Start server!"
+}
+{
+    "level": "info",
+    "ts": "2022-05-22T16:45:08.592+0300",
+    "caller": "rest-api/main.go:13",
+    "msg": "Start server!"
+}
+{
+    "level": "info",
+    "ts": "2022-05-22T16:47:13.158+0300",
+    "caller": "rest-api/main.go:13",
+    "msg": "Start server!"
+}{
+    "level": "info",
+    "ts": "2022-05-22T16:51:47.637+0300",
+    "caller": "rest-api/main.go:13",
+    "msg": "Start server!"
+}{"level":"info","ts":"2022-05-22T23:53:45.119+0300","caller":"rest-api/main.go:13","msg":"Start server!"}
+{"level":"info","ts":"2022-05-22T23:55:28.580+0300","caller":"server/server.go:21","msg":"record not found"}
+{"level":"info","ts":"2022-05-22T23:59:49.623+0300","caller":"rest-api/main.go:13","msg":"Start server!"}
+{"level":"info","ts":"2022-05-23T00:00:41.675+0300","caller":"rest-api/main.go:13","msg":"Start server!"}
+{"level":"info","ts":"2022-05-23T00:03:02.127+0300","caller":"rest-api/main.go:13","msg":"Start server!"}
+{"level":"info","ts":"2022-05-23T00:03:05.039+0300","caller":"server/server.go:96","msg":"strconv.Atoi: parsing \"\": invalid syntax"}
+{"level":"info","ts":"2022-05-23T00:03:49.496+0300","caller":"rest-api/main.go:13","msg":"Start server!"}
+{"level":"info","ts":"2022-05-23T00:04:28.058+0300","caller":"rest-api/main.go:13","msg":"Start server!"}
+{"level":"info","ts":"2022-05-23T00:06:22.863+0300","caller":"rest-api/main.go:13","msg":"Start server!"}
+{"level":"info","ts":"2022-05-23T00:06:56.380+0300","caller":"rest-api/main.go:13","msg":"Start server!"}

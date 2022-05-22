@@ -11,8 +11,8 @@ services:
       LDAP_ADMIN_PASSWORD: "admin"
       LDAP_CONFIG_PASSWORD: "config"
       LDAP_READONLY_USER: "true"
-      LDAP_READONLY_USER_USERNAME: "readadmin"
-      LDAP_READONLY_USER_PASSWORD: "readadmin"
+      LDAP_READONLY_USER_USERNAME: "read-only-admin"
+      LDAP_READONLY_USER_PASSWORD: "read-admin"
       LDAP_RFC2307BIS_SCHEMA: "false"
       LDAP_BACKEND: "mdb"
       LDAP_TLS: "true"
@@ -42,7 +42,7 @@ services:
     # For replication to work correctly, domainname and hostname must be
     # set correctly so that "hostname"."domainname" equates to the
     # fully-qualified domain name for the host.
-    domainname: "example.org"
+    domainname: "test.com"
     hostname: "ldap-server"
   phpldapadmin:
     image: osixia/phpldapadmin:latest

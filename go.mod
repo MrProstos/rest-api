@@ -29,5 +29,6 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/lib/pq v1.10.6 // indirect
+	github.com/shaj13/go-guardian v1.5.11
 	gorm.io/driver/postgres v1.3.5
 )
