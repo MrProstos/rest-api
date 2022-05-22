@@ -15,7 +15,6 @@ const (
 	db_name string = "postgres"
 	db_pass string = "changeme"
 	db_user string = "postgres"
-	//db_type string = "postgres"
 	db_host string = "localhost"
 )
 

@@ -32,6 +32,7 @@ func (client *Client) IsValid() error {
 	return nil
 }
 
+//SELECT * FROM clients WHERE phone_num = client.Phone_num
 func (client *Client) Show() error {
 	db := GetDB()
 	if err := db.Where("phone_num = ?", client.Phone_num).First(&client); err != nil {
