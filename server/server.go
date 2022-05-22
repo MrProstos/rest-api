@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/MrProstos/rest-api/db"
 	"github.com/MrProstos/rest-api/utils"
@@ -82,6 +83,30 @@ func DelClient(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Fprint(w, http.StatusOK)
+}
+
+func ShowOrder(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+
+	ord := new(db.Order)
+	str_client_id := vars["client_id"]
+
+	int_client_id, err := strconv.Atoi(str_client_id)
+	if err != nil {
+		utils.Logger.Info(err.Error())
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	ord.Client_id = uint(int_client_id)
+
+	if err := db.Db_manage.Show(ord); err != nil {
+		utils.Logger.Info(err.Error())
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	fmt.Fprintf(w, "%v %v", http.StatusOK, ord)
+
 }
 
 func AddOrder(w http.ResponseWriter, r *http.Request) {

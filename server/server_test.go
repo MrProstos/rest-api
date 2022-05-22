@@ -156,9 +156,12 @@ func TestDelClietn(t *testing.T) {
 	}
 
 }
+func TestShowOrder(t *testing.T) {
+	body, err := http.Get("http://localhost:2000/showorder/10")
+	if err != nil {
+		t.Error(err)
+	}
 
-func TestAddOrder(t *testing.T) {
-}
-
-func TestUpdateOrder(t *testing.T) {
+	b, _ := io.ReadAll(body.Body)
+	fmt.Println(string(b))
 }
