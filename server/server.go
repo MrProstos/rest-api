@@ -21,7 +21,8 @@ func ShowClients(w http.ResponseWriter, r *http.Request) {
 	client := new(db.Client)
 	client.Phone_num = vars["phone_num"]
 
-	if err := db.Db_manage.Show(client); err != nil {
+	err := db.Db_manage.Show(client)
+	if err != nil {
 		utils.Logger.Info(err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -41,7 +42,8 @@ func AddClient(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := db.Db_manage.Add(client); err != nil {
+	err = db.Db_manage.Add(client)
+	if err != nil {
 		utils.Logger.Info(err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -60,7 +62,8 @@ func UpdateClient(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := db.Db_manage.Update(client); err != nil {
+	err := db.Db_manage.Update(client)
+	if err != nil {
 		utils.Logger.Info(err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -74,13 +77,15 @@ func DelClient(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 
 	client := new(db.Client)
-	if err := decoder.Decode(&client); err != nil {
+	err := decoder.Decode(&client)
+	if err != nil {
 		utils.Logger.Info(err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	if err := db.Db_manage.Del(client); err != nil {
+	err = db.Db_manage.Del(client)
+	if err != nil {
 		utils.Logger.Info(err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -103,7 +108,8 @@ func ShowOrder(w http.ResponseWriter, r *http.Request) {
 	}
 	ord.Client_id = uint(int_client_id)
 
-	if err := db.Db_manage.Show(ord); err != nil {
+	err = db.Db_manage.Show(ord)
+	if err != nil {
 		utils.Logger.Info(err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -124,7 +130,8 @@ func AddOrder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := db.Db_manage.Add(order); err != nil {
+	err = db.Db_manage.Add(order)
+	if err != nil {
 		utils.Logger.Info(err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -137,13 +144,15 @@ func UpdateOrder(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 
 	order := new(db.Order)
-	if err := decoder.Decode(&order); err != nil {
+	err := decoder.Decode(&order)
+	if err != nil {
 		utils.Logger.Info(err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	if err := db.Db_manage.Update(order); err != nil {
+	err = db.Db_manage.Update(order)
+	if err != nil {
 		utils.Logger.Info(err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -157,13 +166,15 @@ func DelOrder(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(r.Body)
 
 	order := new(db.Order)
-	if err := decoder.Decode(&order); err != nil {
+	err := decoder.Decode(&order)
+	if err != nil {
 		utils.Logger.Info(err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
-	if err := db.Db_manage.Del(order); err != nil {
+	err = db.Db_manage.Del(order)
+	if err != nil {
 		utils.Logger.Info(err.Error())
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return

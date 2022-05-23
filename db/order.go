@@ -22,7 +22,8 @@ func (ord Order) IsValid() error {
 //SELECT * FROM orders WHERE client_id = ord.Client_id
 func (ord *Order) Show() error {
 	db := GetDB()
-	if err := db.Where("client_id = ?", ord.Client_id).First(&ord); err != nil {
+	err := db.Where("client_id = ?", ord.Client_id).First(&ord)
+	if err != nil {
 		return err.Error
 	}
 
@@ -30,7 +31,8 @@ func (ord *Order) Show() error {
 }
 
 func (ord *Order) Add() error {
-	if err := ord.IsValid(); err != nil {
+	err := ord.IsValid()
+	if err != nil {
 		return err
 	}
 
@@ -42,7 +44,8 @@ func (ord *Order) Add() error {
 }
 
 func (ord *Order) Update() error {
-	if err := ord.IsValid(); err != nil {
+	err := ord.IsValid()
+	if err != nil {
 		return err
 	}
 
@@ -55,7 +58,8 @@ func (ord *Order) Update() error {
 
 func (ord *Order) Del() error {
 	db := GetDB()
-	if err := db.Delete(&ord, 1); err.Error != nil {
+	err := db.Delete(&ord, 1)
+	if err.Error != nil {
 		return err.Error
 	}
 	return nil

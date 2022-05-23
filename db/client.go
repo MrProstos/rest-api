@@ -43,7 +43,8 @@ func (client *Client) Show() error {
 
 //Добавляет клиента в базуданных
 func (client *Client) Add() error {
-	if err := client.IsValid(); err != nil {
+	err := client.IsValid()
+	if err != nil {
 		return err
 	}
 
@@ -56,12 +57,12 @@ func (client *Client) Add() error {
 
 //Обновление данных клиентаdb/client.go
 func (client *Client) Update() error {
-	if err := client.IsValid(); err != nil {
+	err := client.IsValid()
+	if err != nil {
 		return err
 	}
 
 	db := GetDB()
-
 	if err := db.Model(&client).Updates(&client); err.Error != nil {
 		return err.Error
 	}
@@ -71,7 +72,8 @@ func (client *Client) Update() error {
 //Удаление клиента
 func (client *Client) Del() error {
 	db := GetDB()
-	if err := db.Delete(&Client{}, client.ID); err.Error != nil {
+	err := db.Delete(&Client{}, client.ID)
+	if err.Error != nil {
 		return err.Error
 	}
 	return nil
