@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/MrProstos/rest-api/ldapclient"
-	"github.com/dgrijalva/jwt-go"
+	"github.com/dgrijalva/jwt-go/v4"
 	"github.com/shaj13/go-guardian/auth"
 	"github.com/shaj13/go-guardian/auth/strategies/ldap"
 )
@@ -35,6 +35,20 @@ func readOnlyGoGuardian() {
 	strategy := ldap.New(cfg)
 	authenticator.EnableStrategy(ldap.StrategyKey, strategy)
 
+}
+
+func Registration(w http.ResponseWriter, r *http.Request) {
+	username, password, ok := r.BasicAuth()
+	if len(username) == 0 && len(password) == 0 && !ok {
+		http.Error(w, "fields login, password should not be empty", http.StatusBadRequest)
+		return
+	}
+	err := ldapclient.AddLdapUser(username, password)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+	fmt.Fprint(w, "Authentication successful")
 }
 
 func Middleware(next http.Handler) http.HandlerFunc {
@@ -72,20 +86,7 @@ func Middleware(next http.Handler) http.HandlerFunc {
 	})
 }
 
-func Registration(w http.ResponseWriter, r *http.Request) {
-	username, password, ok := r.BasicAuth()
-	if len(username) == 0 && len(password) == 0 && !ok {
-		http.Error(w, "fields login, password should not be empty", http.StatusBadRequest)
-		return
-	}
-	err := ldapclient.AddLdapUser(username, password)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-	fmt.Fprint(w, "Authentication successful")
-}
-
+//ИСПРАВИТЬ
 func Auth(w http.ResponseWriter, r *http.Request) {
 	username, password, ok := r.BasicAuth()
 	if len(username) == 0 && len(password) == 0 && !ok {
@@ -95,20 +96,18 @@ func Auth(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(username, password)
 	readOnlyGoGuardian()
 
-	info, err := authenticator.Authenticate(r)
+	_, err := authenticator.Authenticate(r)
 	if err != nil {
 		http.Error(w, http.StatusText(http.StatusUnauthorized), http.StatusUnauthorized)
 		return
 	}
-	fmt.Println(info)
 
-	expirationTime := time.Now().Add(5 * time.Minute)
+	expirationTime := time.Now().Add(2 * time.Hour)
 	claims := &Claims{
-		Username: username,
-		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: expirationTime.Unix(),
-		},
+		Username:       username,
+		StandardClaims: jwt.StandardClaims{},
 	}
+
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
 	tokenString, err := token.SignedString(jwtKey)
@@ -117,7 +116,6 @@ func Auth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println(tokenString)
 	http.SetCookie(w, &http.Cookie{
 		Name:    "token",
 		Value:   tokenString,
