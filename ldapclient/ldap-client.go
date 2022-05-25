@@ -1,32 +1,32 @@
-package main
+package ldapclient
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/go-ldap/ldap/v3"
 )
 
-func main() {
+func AddLdapUser(username string, password string) error {
 	conn, err := ldap.DialURL("ldap://127.0.0.1:389")
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
 	err = conn.Bind("cn=admin,dc=test,dc=com", "admin")
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
-	SearchUser(*conn)
-}
 
-func AddUser(conn ldap.Conn) {
-	r := ldap.NewAddRequest("cn=jeck,cn=API,dc=test,dc=com", []ldap.Control{})
+	r := ldap.NewAddRequest(fmt.Sprintf("cn=%v,cn=API,dc=test,dc=com", username), []ldap.Control{})
 	r.Attribute("objectClass", []string{"top", "person"})
-	r.Attribute("cn", []string{"jeck"})
-	r.Attribute("sn", []string{"jeckli"})
-	err := conn.Add(r)
+	r.Attribute("cn", []string{username})
+	r.Attribute("sn", []string{username})
+	r.Attribute("userPassword", []string{password})
+	err = conn.Add(r)
 	if err != nil {
-		log.Fatal(err)
+		return err
 	}
+	return nil
 }
 
 func AddToken(conn ldap.Conn) {
