@@ -14,6 +14,10 @@ const (
 )
 
 func init() {
+	Conn = connLDAP()
+}
+
+func connLDAP() *ldap.Conn {
 	conn, err := ldap.DialURL(url)
 	if err != nil {
 		log.Fatalln(err)
@@ -23,8 +27,8 @@ func init() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+	return conn
 
-	Conn = conn
 }
 
 // GetLDAP возвращает дескриптор объекта Conn

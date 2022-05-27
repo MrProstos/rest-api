@@ -1,167 +1,102 @@
-package server_test
+package server
 
 import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"net/http"
 	"testing"
 )
 
-type TestClient struct {
-	ID        uint
-	Phone_num string
-	Firstname string
-	Lastname  string
-	Birthday  string
-	//OrderID   uint
-	Orders []TestOrder
-}
+var token *http.Cookie
 
-type TestOrder struct {
-	Client_id uint
-	Title     string
-	To        string
-	Body      string
-	Status    uint
-}
-
-func TestShowClietn(t *testing.T) {
-	body, err := http.Get("http://localhost:2000/showclietns/777")
+func getToken(t *testing.T) {
+	client := http.Client{}
+	auth, err := http.NewRequest("GET", "http://localhost:2000/auth/", nil)
 	if err != nil {
-		t.Error(err)
+		t.Fatal(err)
+	}
+	auth.SetBasicAuth("test", "test")
+	authResponse, _ := client.Do(auth)
+	if authResponse.StatusCode != 200 {
+		t.Fatal(authResponse)
 	}
 
-	b, _ := io.ReadAll(body.Body)
+	token = authResponse.Cookies()[0]
+
+	err = authResponse.Body.Close()
+	if err != nil {
+		t.Fatal(err)
+	}
+
+}
+
+func TestShowClients(t *testing.T) {
+	getToken(t)
+	client := http.Client{}
+	showclient, err := http.NewRequest("GET", "http://localhost:2000/showclietns/7777", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	showclient.AddCookie(token)
+	showclientResponse, _ := client.Do(showclient)
+	if showclientResponse.StatusCode != 200 {
+		t.Fatal(showclientResponse)
+	}
+	b, _ := ioutil.ReadAll(showclientResponse.Body)
 	fmt.Println(string(b))
 }
 
-func TestAddClient(t *testing.T) {
-	o := TestOrder{
-		Title:  "Vlad",
-		To:     "Vlad",
-		Body:   "Test",
-		Status: 0,
-	}
-	array := []TestClient{{
-		Phone_num: "777",
-		Firstname: "Vlad",
-		Lastname:  "Mikhin",
-		Birthday:  "1999-07-22",
-		//OrderID:   1,
-		Orders: []TestOrder{o},
-	}, {
-		Phone_num: "666",
-		Firstname: "Test",
-		Lastname:  "Test",
-		Birthday:  "00-00-0000",
-	}, {
-		Phone_num: "123456789",
-		Firstname: "QQQQ",
-		Lastname:  "ZZZZ",
-		Birthday:  "0000000",
-	}}
+func TestAddUpdateDelClient(t *testing.T) {
+	getToken(t)
+	httpClient := http.Client{}
+	t.Run("Test AddClient", func(t *testing.T) {
+		body := map[string]interface{}{
+			"phone_num": "98765431",
+			"firstname": "TestAddClient",
+			"lastname":  "TestAddClient",
+			"birthday":  "36632",
+		}
+		jsonStr, _ := json.Marshal(body)
 
-	for i := range array {
+		addclientRequest, _ := http.NewRequest("POST", "http://localhost:2000/addclient/", bytes.NewReader(jsonStr))
+		addclientRequest.AddCookie(token)
 
-		strJSON, err := json.Marshal(array[i])
-		if err != nil {
-			t.Error(err)
+		addclientResponse, _ := httpClient.Do(addclientRequest)
+		if addclientResponse.StatusCode != 200 {
+			t.Fatal(addclientResponse)
 		}
 
-		body, err := http.Post("http://localhost:2000/addclient/", "application/json", bytes.NewBuffer(strJSON))
-		if err != nil {
-			t.Error(err)
+		b, _ := ioutil.ReadAll(addclientResponse.Body)
+		fmt.Println(string(b))
+		addclientResponse.Body.Close()
+	})
+
+	t.Run("Test UpdateClient", func(t *testing.T) {
+		body := map[string]interface{}{
+			"phone_num": "98765431",
+			"firstname": "TestUpdateClient",
+			"lastname":  "TestUpdateClient",
+			"birthday":  "TestUpdateClient",
 		}
-		b, _ := ioutil.ReadAll(body.Body)
+		jsonStr, _ := json.Marshal(body)
 
-		if string(b) != "200" {
-			t.Error(string(b))
-		}
-		fmt.Printf("Тест номер %v %v\n", i+1, string(b))
-	}
-}
+		updateclientRequest, _ := http.NewRequest("PUT", "http://localhost:2000/updateclient/", bytes.NewReader(jsonStr))
+		updateclientRequest.AddCookie(token)
 
-func TestUpdateClient(t *testing.T) {
-	array := []TestClient{{
-		ID:        1,
-		Phone_num: "UPDAT1",
-		Firstname: "UPDATE",
-		Lastname:  "UPDATE",
-		Birthday:  "UPDATE",
-	}, {
-		ID:        2,
-		Phone_num: "UPDATE2",
-		Firstname: "UPDATE",
-		Lastname:  "UPDATE",
-		Birthday:  "UPDATE",
-	}, {
-		ID:        3,
-		Phone_num: "UPDATE3",
-		Firstname: "UPDATE",
-		Lastname:  "UPDATE",
-		Birthday:  "UPDATE",
-	}}
-
-	for i := range array {
-
-		strJSON, err := json.Marshal(array[i])
-		if err != nil {
-			t.Error(err)
+		updateclientResponse, _ := httpClient.Do(updateclientRequest)
+		if updateclientResponse.StatusCode != 200 {
+			t.Fatal(updateclientResponse)
 		}
 
-		body, err := http.Post("http://localhost:2000/updateclient/", "application/json", bytes.NewBuffer(strJSON))
-		if err != nil {
-			t.Error(err)
-		}
+		b, _ := ioutil.ReadAll(updateclientResponse.Body)
+		fmt.Println(string(b))
+		updateclientResponse.Body.Close()
+	})
 
-		b, _ := ioutil.ReadAll(body.Body)
+	t.Run("Test DelClient", func(t *testing.T) {
 
-		if string(b) != "200" {
-			t.Error(string(b))
-		}
-		fmt.Printf("Тест номер %v %v\n", i+1, string(b))
-	}
-}
+	})
 
-func TestDelClietn(t *testing.T) {
-	array := []TestClient{{
-		ID: 1,
-	}, {
-		ID: 2,
-	}, {
-		ID: 3,
-	}}
-
-	for i := range array {
-
-		strJSON, err := json.Marshal(array[i])
-		if err != nil {
-			t.Error(err)
-		}
-
-		body, err := http.Post("http://localhost:2000/delclient/", "application/json", bytes.NewBuffer(strJSON))
-		if err != nil {
-			t.Error(err)
-		}
-
-		b, _ := ioutil.ReadAll(body.Body)
-
-		if string(b) != "200" {
-			t.Error(string(b))
-		}
-		fmt.Printf("Тест номер %v %v\n", i+1, string(b))
-	}
-
-}
-func TestShowOrder(t *testing.T) {
-	body, err := http.Get("http://localhost:2000/showorder/10")
-	if err != nil {
-		t.Error(err)
-	}
-
-	b, _ := io.ReadAll(body.Body)
-	fmt.Println(string(b))
 }

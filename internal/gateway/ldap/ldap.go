@@ -2,6 +2,7 @@ package ldap
 
 import (
 	"fmt"
+	"github.com/MrProstos/rest-api/internal/core"
 	"github.com/go-ldap/ldap/v3"
 	"log"
 )
@@ -10,19 +11,16 @@ type ManageLDAP interface {
 	AddUser() (err error)
 }
 
-type User struct {
-	Username string
-	Password string
-}
+type Operator core.Operator
 
-func (user User) AddUser() (err error) {
+func (o Operator) AddUser() (err error) {
 	conn := GetLDAP()
 
-	request := ldap.NewAddRequest(fmt.Sprintf("cn=%v,cn=API,dc=test,dc=com", user.Username), []ldap.Control{})
+	request := ldap.NewAddRequest(fmt.Sprintf("cn=%v,cn=API,dc=test,dc=com", o.Username), []ldap.Control{})
 	request.Attribute("objectClass", []string{"top", "person"})
-	request.Attribute("cn", []string{user.Username})
-	request.Attribute("sn", []string{user.Username})
-	request.Attribute("userPassword", []string{user.Password})
+	request.Attribute("cn", []string{o.Username})
+	request.Attribute("sn", []string{o.Username})
+	request.Attribute("userPassword", []string{o.Password})
 
 	err = conn.Add(request)
 	if err != nil {

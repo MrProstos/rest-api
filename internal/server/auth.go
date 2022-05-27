@@ -1,14 +1,11 @@
 package server
 
 import (
-	"fmt"
-	"net/http"
-	"time"
-
-	l "github.com/MrProstos/rest-api/internal/ldap"
+	l "github.com/MrProstos/rest-api/internal/gateway/ldap"
 	"github.com/dgrijalva/jwt-go/v4"
 	"github.com/shaj13/go-guardian/auth"
 	"github.com/shaj13/go-guardian/auth/strategies/ldap"
+	"net/http"
 )
 
 var (
@@ -44,9 +41,11 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user := l.User{Username: username, Password: password}
+	operator := new(l.Operator)
+	operator.Username = username
+	operator.Password = password
 
-	err := l.ManageLDAP.AddUser(user)
+	err := l.ManageLDAP.AddUser(operator)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -54,8 +53,9 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 	http.Error(w, "Authentication successful", http.StatusOK)
 }
 
-func Middleware(next http.Handler) http.HandlerFunc {
+func AuthMiddleware(next http.Handler) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+
 		c, err := r.Cookie("token")
 		if err != nil {
 			if err == http.ErrNoCookie {
@@ -86,17 +86,18 @@ func Middleware(next http.Handler) http.HandlerFunc {
 		}
 
 		http.Error(w, "Successful", http.StatusOK)
+
+		next.ServeHTTP(w, r)
 	})
 }
 
-//ИСПРАВИТЬ
 func Auth(w http.ResponseWriter, r *http.Request) {
 	username, password, ok := r.BasicAuth()
 	if len(username) == 0 && len(password) == 0 && !ok {
 		http.Error(w, "fields login, password should not be empty", http.StatusBadRequest)
 		return
 	}
-	fmt.Println(username, password)
+
 	readOnlyGoGuardian()
 
 	_, err := authenticator.Authenticate(r)
@@ -105,7 +106,6 @@ func Auth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	expirationTime := time.Now().Add(2 * time.Hour)
 	claims := &Claims{
 		Username:       username,
 		StandardClaims: jwt.StandardClaims{},
@@ -120,9 +120,8 @@ func Auth(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.SetCookie(w, &http.Cookie{
-		Name:    "token",
-		Value:   tokenString,
-		Expires: expirationTime,
+		Name:  "token",
+		Value: tokenString,
 	})
-	http.Error(w, "Successful", http.StatusOK)
+	http.Error(w, "Authentication success", http.StatusOK)
 }

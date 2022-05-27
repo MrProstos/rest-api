@@ -2,11 +2,9 @@ package db
 
 import (
 	"fmt"
-	"log"
-
 	"gorm.io/driver/postgres"
-
 	"gorm.io/gorm"
+	"log"
 )
 
 var DB *gorm.DB
@@ -19,7 +17,10 @@ const (
 )
 
 func init() {
+	DB = connPSQL()
+}
 
+func connPSQL() *gorm.DB {
 	dbUrl := fmt.Sprintf("host=%s user=%s dbname=%s sslmode=disable password=%s", dbHost, dbUser, dbName, dbPass)
 
 	conn, err := gorm.Open(postgres.Open(dbUrl), &gorm.Config{})
@@ -27,7 +28,12 @@ func init() {
 		log.Fatal(err)
 	}
 
-	DB = conn
+	err = conn.AutoMigrate(&Client{}, &Order{})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return conn
 }
 
 // GetDB возвращает дескриптор объекта DB
