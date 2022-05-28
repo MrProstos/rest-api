@@ -11,7 +11,7 @@ var DB *gorm.DB
 
 const (
 	dbName string = "postgres"
-	dbPass string = "changeme"
+	dbPass string = "Zz123456"
 	dbUser string = "postgres"
 	dbHost string = "localhost"
 )
