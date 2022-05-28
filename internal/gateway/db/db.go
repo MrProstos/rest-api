@@ -2,7 +2,6 @@ package db
 
 import (
 	"errors"
-	"github.com/MrProstos/rest-api/internal/core"
 )
 
 type ManageDb interface {
@@ -13,14 +12,27 @@ type ManageDb interface {
 	Del() error     //Удаление клиента
 }
 
-type (
-	Client core.Client
-	Order  core.Order
-)
+// Client Структура данных Клиент содержащая поля такие же как и в базе данных
+type Client struct {
+	//ID        uint    `gorm:"primaryKey" json:"id"` // Первичный ключ autoincrement . ПОМЕНЯТЬ НА НОМЕР ТЕЛЕФОНА
+	PhoneNum  string  `gorm:"primaryKey;unique;type:varchar;not null" json:"phone_num"`
+	Firstname string  `gorm:"type:varchar;not null" json:"firstname"`
+	Lastname  string  `gorm:"type:varchar;not null" json:"lastname"`
+	Birthday  string  `gorm:"type:date;not null" json:"birthday"` // Поменять на тип данных Date
+	Orders    []Order `gorm:"foreignKey:PhoneNum"`
+}
+
+type Order struct {
+	ID       uint   `gorm:"primaryKey"`
+	PhoneNum string `gorm:"type:varchar;not null"`
+	To       string
+	Body     string
+	Status   uint `gorm:"not null;default:1"`
+}
 
 // IsValid Проверка на валидность данных
 func (client *Client) IsValid() error {
-	if len(client.Firstname) == 0 || len(client.Lastname) == 0 || len(client.Phone_num) == 0 {
+	if len(client.Firstname) == 0 || len(client.Lastname) == 0 || len(client.PhoneNum) == 0 {
 		return errors.New("fields phone_num, firstname, lastname, birthday are required")
 	}
 	return nil
@@ -29,7 +41,7 @@ func (client *Client) IsValid() error {
 // Show Вывод клиентов по номеру телефона
 func (client *Client) Show() error {
 	getDB := GetDB()
-	if err := getDB.Where("phone_num = ?", client.Phone_num).First(&client); err != nil {
+	if err := getDB.Where("phone_num = ?", client.PhoneNum).First(&client); err != nil {
 		return err.Error
 	}
 	return nil
@@ -57,7 +69,7 @@ func (client *Client) Update() error {
 	}
 
 	getDB := GetDB()
-	if err := getDB.Model(&client).Where("phone_num = ?", client.Phone_num).Updates(&client); err.Error != nil {
+	if err := getDB.Model(&client).Where("phone_num = ?", client.PhoneNum).Updates(&client); err.Error != nil {
 		return err.Error
 	}
 	return nil
@@ -67,12 +79,12 @@ func (client *Client) Update() error {
 func (client *Client) Del() error {
 	getDB := GetDB()
 
-	err := getDB.Exec("DELETE FROM public.orders WHERE orders.client_id = ?", client.ID)
+	err := getDB.Exec("DELETE FROM public.orders WHERE orders.phone_num = ?", client.PhoneNum)
 	if err.Error != nil {
 		return err.Error
 	}
 
-	err = getDB.Exec("DELETE FROM public.clients WHERE clients.id = ?", client.ID)
+	err = getDB.Exec("DELETE FROM public.clients WHERE clients.phone_num = ?", client.PhoneNum)
 	if err.Error != nil {
 		return err.Error
 	}
@@ -80,8 +92,8 @@ func (client *Client) Del() error {
 }
 
 func (ord Order) IsValid() error {
-	if ord.Status == 0 {
-		return errors.New("fields Client_id, Status are required")
+	if len(ord.PhoneNum) == 0 {
+		return errors.New("fields phone_num are required")
 	}
 	return nil
 }
@@ -89,7 +101,7 @@ func (ord Order) IsValid() error {
 // Show SELECT * FROM orders WHERE client_id = ord.Client_id
 func (ord *Order) Show() error {
 	getDB := GetDB()
-	err := getDB.Where("client_id = ?", ord.Client_id).First(&ord)
+	err := getDB.Where("client_phone_num = ?", ord.PhoneNum).First(&ord)
 	if err != nil {
 		return err.Error
 	}
@@ -117,7 +129,7 @@ func (ord *Order) Update() error {
 	}
 
 	getDB := GetDB()
-	if err := getDB.Model(&ord).Updates(&ord); err.Error != nil {
+	if err := getDB.Model(&ord).Where("client_phone_num = ?", ord.PhoneNum).Updates(&ord); err.Error != nil {
 		return err.Error
 	}
 	return nil
@@ -125,7 +137,7 @@ func (ord *Order) Update() error {
 
 func (ord *Order) Del() error {
 	getDB := GetDB()
-	err := getDB.Delete(&ord, ord.Client_id)
+	err := getDB.Delete(&ord, ord.PhoneNum)
 	if err.Error != nil {
 		return err.Error
 	}
