@@ -3,20 +3,37 @@ package db
 import (
 	"fmt"
 	"testing"
+	"time"
 )
+
+func Test(t *testing.T) {
+	date, err := time.Parse("2006-01-02", "1999-07-22")
+	if err != nil {
+		t.Error(err)
+	}
+	fmt.Println(date.Format("2006-01-02"))
+}
 
 func TestClient_Add(t *testing.T) {
 	client := []Client{{
-		Phone_num: "7777",
+		PhoneNum:  "7777",
 		Firstname: "Vlad",
 		Lastname:  "Mikhin",
-		Birthday:  "22-07-1999",
-		Orders:    nil,
+		Birthday:  "1999-07-22",
+		Orders: []Order{
+			{
+				PhoneNum: "7777",
+				Status:   0,
+			}, {
+				PhoneNum: "7777",
+				Status:   0,
+			},
+		},
 	}, {
-		Phone_num: "6666",
+		PhoneNum:  "6666",
 		Firstname: "test",
 		Lastname:  "test",
-		Birthday:  "test",
+		Birthday:  "1999-07-22",
 		Orders:    nil,
 	}}
 	for i := range client {
@@ -30,13 +47,13 @@ func TestClient_Add(t *testing.T) {
 
 func TestClient_Update(t *testing.T) {
 	client := []Client{{
-		Phone_num: "7777",
+		PhoneNum:  "7777",
 		Firstname: "update",
 		Lastname:  "update",
 		Birthday:  "update",
 		Orders:    nil,
 	}, {
-		Phone_num: "6666",
+		PhoneNum:  "6666",
 		Firstname: "update",
 		Lastname:  "update",
 		Birthday:  "update",
@@ -53,9 +70,9 @@ func TestClient_Update(t *testing.T) {
 
 func TestClient_Show(t *testing.T) {
 	client := []Client{{
-		Phone_num: "7777",
+		PhoneNum: "7777",
 	}, {
-		Phone_num: "6666",
+		PhoneNum: "6666",
 	}}
 	for i := range client {
 		t.Run(fmt.Sprintf("Test-%v", i+1), func(t *testing.T) {
@@ -69,9 +86,9 @@ func TestClient_Show(t *testing.T) {
 
 func TestClient_Del(t *testing.T) {
 	client := []Client{{
-		ID: 1,
+		PhoneNum: "7777",
 	}, {
-		ID: 2,
+		PhoneNum: "6666",
 	}}
 	for i := range client {
 		t.Run(fmt.Sprintf("Test-%v", i+1), func(t *testing.T) {
