@@ -6,14 +6,23 @@ import (
 	"github.com/MrProstos/rest-api/internal/gateway/db"
 	"github.com/gorilla/mux"
 	"net/http"
-	"strconv"
+	"time"
 )
+
+func parseDate(str string) (string, error) {
+	date, err := time.Parse("2006-01-02", str)
+	if err != nil {
+		return "", err
+	}
+	str = date.Format("2006-01-02")
+	return str, nil
+}
 
 func ShowClients(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
 	client := new(db.Client)
-	client.Phone_num = vars["phone_num"]
+	client.PhoneNum = vars["phone_num"]
 
 	err := db.ManageDb.Show(client)
 	if err != nil {
@@ -33,6 +42,12 @@ func AddClient(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	str, err := parseDate(client.Birthday)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+	}
+	client.Birthday = str
+
 	err = db.ManageDb.Add(client)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
@@ -49,6 +64,14 @@ func UpdateClient(w http.ResponseWriter, r *http.Request) {
 	if err := decoder.Decode(&client); err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
+	}
+
+	if client.Birthday != "" {
+		str, err := parseDate(client.Birthday)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusBadRequest)
+		}
+		client.Birthday = str
 	}
 
 	err := db.ManageDb.Update(client)
@@ -83,23 +106,17 @@ func ShowOrder(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
 	ord := new(db.Order)
-	strClientId := vars["client_id"]
+	client_phone_num := vars["client_phone_num"]
 
-	intClientId, err := strconv.Atoi(strClientId)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
-		return
-	}
-	ord.Client_id = uint(intClientId)
+	ord.PhoneNum = client_phone_num
 
-	err = db.ManageDb.Show(ord)
+	err := db.ManageDb.Show(ord)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	http.Error(w, fmt.Sprint(ord), http.StatusOK)
-
 }
 
 func AddOrder(w http.ResponseWriter, r *http.Request) {
