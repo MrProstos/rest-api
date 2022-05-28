@@ -2,7 +2,6 @@ package ldap
 
 import (
 	"fmt"
-	"github.com/MrProstos/rest-api/internal/core"
 	"github.com/go-ldap/ldap/v3"
 	"log"
 )
@@ -10,8 +9,10 @@ import (
 type ManageLDAP interface {
 	AddUser() (err error)
 }
-
-type Operator core.Operator
+type Operator struct {
+	Username string
+	Password string
+}
 
 func (o Operator) AddUser() (err error) {
 	conn := GetLDAP()
