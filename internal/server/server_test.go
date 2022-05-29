@@ -117,6 +117,7 @@ func TestAddUpdateDelClient(t *testing.T) {
 
 		b, _ := ioutil.ReadAll(updateclientResponse.Body)
 		fmt.Println(string(b))
+
 		updateclientResponse.Body.Close()
 	})
 
