@@ -35,7 +35,7 @@ func getToken(t *testing.T) {
 func TestShowClients(t *testing.T) {
 	getToken(t)
 	client := http.Client{}
-	showclient, err := http.NewRequest("GET", "http://localhost:2000/showclietns/7777", nil)
+	showclient, err := http.NewRequest("GET", "http://localhost:2000/clietns/7777", nil)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -56,11 +56,17 @@ func TestAddUpdateDelClient(t *testing.T) {
 			"phone_num": "98765431",
 			"firstname": "TestAddClient",
 			"lastname":  "TestAddClient",
-			"birthday":  "36632",
+			"birthday":  "1999-07-22",
+			"orders": []map[string]interface{}{
+				{"phone_num": "98765431",
+					"to":     "vlad",
+					"body":   "vlad",
+					"status": 1},
+			},
 		}
 		jsonStr, _ := json.Marshal(body)
 
-		addclientRequest, _ := http.NewRequest("POST", "http://localhost:2000/addclient/", bytes.NewReader(jsonStr))
+		addclientRequest, _ := http.NewRequest("POST", "http://localhost:2000/client/add/", bytes.NewReader(jsonStr))
 		addclientRequest.AddCookie(token)
 
 		addclientResponse, _ := httpClient.Do(addclientRequest)
@@ -78,11 +84,11 @@ func TestAddUpdateDelClient(t *testing.T) {
 			"phone_num": "98765431",
 			"firstname": "TestUpdateClient",
 			"lastname":  "TestUpdateClient",
-			"birthday":  "TestUpdateClient",
+			"birthday":  "1999-09-09",
 		}
 		jsonStr, _ := json.Marshal(body)
 
-		updateclientRequest, _ := http.NewRequest("PUT", "http://localhost:2000/updateclient/", bytes.NewReader(jsonStr))
+		updateclientRequest, _ := http.NewRequest("PUT", "http://localhost:2000/client/update/", bytes.NewReader(jsonStr))
 		updateclientRequest.AddCookie(token)
 
 		updateclientResponse, _ := httpClient.Do(updateclientRequest)
@@ -96,7 +102,22 @@ func TestAddUpdateDelClient(t *testing.T) {
 	})
 
 	t.Run("Test DelClient", func(t *testing.T) {
+		body := map[string]interface{}{
+			"phone_num": "98765431",
+		}
+		jsonStr, _ := json.Marshal(body)
 
+		updateclientRequest, _ := http.NewRequest("DELETE", "http://localhost:2000/client/delete/", bytes.NewReader(jsonStr))
+		updateclientRequest.AddCookie(token)
+
+		updateclientResponse, _ := httpClient.Do(updateclientRequest)
+		if updateclientResponse.StatusCode != 200 {
+			t.Fatal(updateclientResponse)
+		}
+
+		b, _ := ioutil.ReadAll(updateclientResponse.Body)
+		fmt.Println(string(b))
+		updateclientResponse.Body.Close()
 	})
 
 }

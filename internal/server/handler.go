@@ -106,9 +106,9 @@ func ShowOrder(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 
 	ord := new(db.Order)
-	client_phone_num := vars["client_phone_num"]
+	phoneNum := vars["phone_num"]
 
-	ord.PhoneNum = client_phone_num
+	ord.PhoneNum = phoneNum
 
 	err := db.ManageDb.Show(ord)
 	if err != nil {

@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/MrProstos/rest-api/internal/server"
 	"log"
 	"net/http"
+
+	"github.com/MrProstos/rest-api/internal/server"
 )
 
 func main() {

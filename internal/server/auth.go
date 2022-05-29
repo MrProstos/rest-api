@@ -85,8 +85,6 @@ func AuthMiddleware(next http.Handler) http.HandlerFunc {
 			return
 		}
 
-		http.Error(w, "Successful", http.StatusOK)
-
 		next.ServeHTTP(w, r)
 	})
 }

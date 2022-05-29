@@ -19,15 +19,15 @@ type Client struct {
 	Firstname string  `gorm:"type:varchar;not null" json:"firstname"`
 	Lastname  string  `gorm:"type:varchar;not null" json:"lastname"`
 	Birthday  string  `gorm:"type:date;not null" json:"birthday"` // Поменять на тип данных Date
-	Orders    []Order `gorm:"foreignKey:PhoneNum"`
+	Orders    []Order `gorm:"foreignKey:PhoneNum" json:"orders"`
 }
 
 type Order struct {
 	ID       uint   `gorm:"primaryKey"`
-	PhoneNum string `gorm:"type:varchar;not null"`
-	To       string
-	Body     string
-	Status   uint `gorm:"not null;default:1"`
+	PhoneNum string `gorm:"type:varchar;not null" json:"phone_num"`
+	To       string `json:"to"`
+	Body     string `json:"body"`
+	Status   uint   `gorm:"not null;default:1" json:"status"`
 }
 
 // IsValid Проверка на валидность данных
@@ -78,7 +78,7 @@ func (client *Client) Update() error {
 // Del Удаление клиента
 func (client *Client) Del() error {
 	getDB := GetDB()
-
+	//Добавить проверку на существования базе или нет
 	err := getDB.Exec("DELETE FROM public.orders WHERE orders.phone_num = ?", client.PhoneNum)
 	if err.Error != nil {
 		return err.Error
