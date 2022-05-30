@@ -2,11 +2,11 @@ package server
 
 import (
 	"encoding/json"
-	"fmt"
-	"github.com/MrProstos/rest-api/internal/gateway/db"
-	"github.com/gorilla/mux"
 	"net/http"
 	"time"
+
+	"github.com/MrProstos/rest-api/internal/gateway/db"
+	"github.com/gorilla/mux"
 )
 
 func parseDate(str string) (string, error) {
@@ -29,7 +29,10 @@ func ShowClients(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-	http.Error(w, fmt.Sprint(client), http.StatusOK)
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(client)
 }
 
 func AddClient(w http.ResponseWriter, r *http.Request) {
@@ -116,7 +119,9 @@ func ShowOrder(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	http.Error(w, fmt.Sprint(ord), http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(ord)
 }
 
 func AddOrder(w http.ResponseWriter, r *http.Request) {
