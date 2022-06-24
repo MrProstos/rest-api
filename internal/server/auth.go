@@ -1,7 +1,7 @@
 package server
 
 import (
-	l "github.com/MrProstos/rest-api/internal/gateway/ldap"
+	"github.com/MrProstos/rest-api/internal/gateway/myldap"
 	"github.com/dgrijalva/jwt-go/v4"
 	"github.com/shaj13/go-guardian/auth"
 	"github.com/shaj13/go-guardian/auth/strategies/ldap"
@@ -16,6 +16,10 @@ var (
 type Claims struct {
 	Username string
 	jwt.StandardClaims
+}
+
+func NewClaims(username string, standardClaims jwt.StandardClaims) *Claims {
+	return &Claims{Username: username, StandardClaims: standardClaims}
 }
 
 func readOnlyGoGuardian() {
@@ -41,11 +45,9 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	operator := new(l.Operator)
-	operator.Username = username
-	operator.Password = password
+	operator := myldap.NewOperator(username, password)
 
-	err := l.ManageLDAP.AddUser(operator)
+	err := operator.AddUser()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
@@ -56,7 +58,7 @@ func Registration(w http.ResponseWriter, r *http.Request) {
 func AuthMiddleware(next http.Handler) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		c, err := r.Cookie("token")
+		token, err := r.Cookie("token")
 		if err != nil {
 			if err == http.ErrNoCookie {
 				http.Error(w, err.Error(), http.StatusUnauthorized)
@@ -65,11 +67,9 @@ func AuthMiddleware(next http.Handler) http.HandlerFunc {
 			http.Error(w, err.Error(), http.StatusBadRequest)
 		}
 
-		tknStr := c.Value
-
 		claims := new(Claims)
 
-		tkn, err := jwt.ParseWithClaims(tknStr, claims, func(token *jwt.Token) (interface{}, error) {
+		tkn, err := jwt.ParseWithClaims(token.Value, claims, func(token *jwt.Token) (interface{}, error) {
 			return jwtKey, nil
 		})
 		if err != nil {
@@ -104,10 +104,7 @@ func Auth(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	claims := &Claims{
-		Username:       username,
-		StandardClaims: jwt.StandardClaims{},
-	}
+	claims := NewClaims(username, jwt.StandardClaims{})
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
