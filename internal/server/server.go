@@ -5,27 +5,27 @@ import (
 	"net/http"
 )
 
-var Router *mux.Router
-
-func init() {
-
-	router := mux.NewRouter().StrictSlash(true)
-	router.HandleFunc("/registration/", Registration).Methods("GET")
-	router.HandleFunc("/auth/", Auth).Methods("GET")
-
-	router.HandleFunc("/client/{phone_num}", AuthMiddleware(http.HandlerFunc(ShowClients))).Methods("GET")
-	router.HandleFunc("/client/add/", AuthMiddleware(http.HandlerFunc(AddClient))).Methods("POST")
-	router.HandleFunc("/client/update/", AuthMiddleware(http.HandlerFunc(UpdateClient))).Methods("POST")
-	router.HandleFunc("/client/delete/", AuthMiddleware(http.HandlerFunc(DelClient))).Methods("DELETE")
-
-	router.HandleFunc("/order/{phone_num}", AuthMiddleware(http.HandlerFunc(ShowOrder))).Methods("GET")
-	router.HandleFunc("/order/add/", AuthMiddleware(http.HandlerFunc(AddOrder))).Methods("POST")
-	router.HandleFunc("/order/update/", AuthMiddleware(http.HandlerFunc(UpdateOrder))).Methods("POST")
-	router.HandleFunc("/order/delete/", AuthMiddleware(http.HandlerFunc(DelOrder))).Methods("DELETE")
-	Router = router
-
+type router struct {
+	Router *mux.Router
 }
 
-func GetRouter() *mux.Router {
-	return Router
+func (router *router) Init() *router {
+	router.Router = mux.NewRouter().StrictSlash(true)
+	router.Router.HandleFunc("/registration/", Registration).Methods("GET")
+	router.Router.HandleFunc("/auth/", Auth).Methods("GET")
+
+	router.Router.HandleFunc("/client/{phone_num}", http.HandlerFunc(ShowClients)).Methods("GET")
+	router.Router.HandleFunc("/client/add/", AuthMiddleware(http.HandlerFunc(AddClient))).Methods("POST")
+	router.Router.HandleFunc("/client/update/", AuthMiddleware(http.HandlerFunc(UpdateClient))).Methods("POST")
+	router.Router.HandleFunc("/client/delete/", AuthMiddleware(http.HandlerFunc(DelClient))).Methods("DELETE")
+
+	router.Router.HandleFunc("/order/{phone_num}", AuthMiddleware(http.HandlerFunc(ShowOrder))).Methods("GET")
+	router.Router.HandleFunc("/order/add/", AuthMiddleware(http.HandlerFunc(AddOrder))).Methods("POST")
+	router.Router.HandleFunc("/order/update/", AuthMiddleware(http.HandlerFunc(UpdateOrder))).Methods("POST")
+	router.Router.HandleFunc("/order/delete/", AuthMiddleware(http.HandlerFunc(DelOrder))).Methods("DELETE")
+	return router
+}
+
+func NewRouter() *router {
+	return &router{}
 }
