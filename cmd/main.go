@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	err := db.NewDataBaseConfig().SetConnect("postgres", "Zz123456", "postgres", "localhost").Connect()
+	err := db.NewDataBaseConfig().Connect()
 	if err != nil {
 		log.Fatalln(err)
 	}

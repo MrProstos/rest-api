@@ -16,17 +16,9 @@ type dataBaseConfig struct {
 	dbHost string
 }
 
-func (database *dataBaseConfig) SetConnect(dbName string, dbPass string, dbUser string, dbHost string) *dataBaseConfig {
-	database.dbName = dbName
-	database.dbPass = dbPass
-	database.dbUser = dbUser
-	database.dbHost = dbHost
-	return database
-}
-
 func (database *dataBaseConfig) Connect() error {
 	dbUrl := fmt.Sprintf("host=%s user=%s dbname=%s sslmode=disable password=%s",
-		database.dbHost, database.dbUser, database.dbName, database.dbPass)
+		"localhost", "postgres", "postgres", "Zz123456")
 
 	conn, err := gorm.Open(postgres.Open(dbUrl), &gorm.Config{})
 	if err != nil {

@@ -2,7 +2,6 @@ package db
 
 import (
 	"errors"
-	"fmt"
 )
 
 type Tables interface {
@@ -21,6 +20,19 @@ type client struct {
 	Orders    []order `gorm:"foreignKey:PhoneNum" json:"orders,omitempty"`
 }
 
+func NewClient() *client {
+	return &client{}
+}
+
+func (client *client) SetClient(phoneNum string, firstname string, lastname string, birthday string, orders []order) *client {
+	client.PhoneNum = phoneNum
+	client.Firstname = firstname
+	client.Lastname = lastname
+	client.Birthday = birthday
+	client.Orders = orders
+	return client
+}
+
 func (client *client) isValid() error {
 	if len(client.Firstname) == 0 || len(client.Lastname) == 0 ||
 		len(client.PhoneNum) == 0 || len(client.Birthday) == 0 {
@@ -30,7 +42,6 @@ func (client *client) isValid() error {
 }
 
 func (client *client) Select() (Tables, error) {
-	fmt.Println(client)
 	if len(client.PhoneNum) == 0 {
 		return nil, errors.New("fields phone_num are required")
 	}
@@ -66,17 +77,17 @@ func (client *client) Update() (Tables, error) {
 		return nil, errors.New("fields phone_num are required")
 	}
 
-	err := GetConn().Model(&client).Where("phone_num = ?", client.PhoneNum).Updates(&client)
-	if err.Error != nil {
-		return nil, err.Error
-	}
-
 	for _, val := range client.Orders {
-		err = GetConn().Model(&val).Where("phone_num = ?", client.PhoneNum).Updates(&val)
+		err := GetConn().Model(&val).Where("phone_num = ?", client.PhoneNum).Updates(&val)
 		if err.Error != nil {
 			return nil, err.Error
 		}
 
+	}
+	client.Orders = nil
+	err := GetConn().Model(&client).Where("phone_num = ?", client.PhoneNum).Updates(&client)
+	if err.Error != nil {
+		return nil, err.Error
 	}
 
 	return client, nil
@@ -98,16 +109,32 @@ func (client *client) Delete() (Tables, error) {
 	return client, nil
 }
 
-func NewClient() *client {
-	return &client{}
-}
-
 type order struct {
 	ID       uint   `gorm:"primaryKey"`
 	PhoneNum string `gorm:"type:varchar;not null" json:"phone_num,omitempty"`
 	To       string `json:"to,omitempty"`
 	Body     string `json:"body,omitempty"`
 	Status   uint   `gorm:"not null;default:1" json:"status,omitempty"`
+}
+
+func NewOrder() *order {
+	return &order{}
+}
+
+func SetArrayOrder(args ...*order) []order {
+	a := []order{}
+	for _, i := range args {
+		a = append(a, *i)
+	}
+	return a
+}
+
+func (order *order) SetOrder(phoneNum string, to string, body string, status uint) *order {
+	order.PhoneNum = phoneNum
+	order.To = to
+	order.Body = body
+	order.Status = status
+	return order
 }
 
 func (order *order) isValid() error {
@@ -160,8 +187,4 @@ func (order *order) Delete() (Tables, error) {
 		return nil, err.Error
 	}
 	return order, nil
-}
-
-func NewOrder() *order {
-	return &order{}
 }

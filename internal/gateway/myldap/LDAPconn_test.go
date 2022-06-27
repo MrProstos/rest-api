@@ -47,7 +47,7 @@ func Test_newConf(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := newConf(tt.args.url, tt.args.bind, tt.args.password); !reflect.DeepEqual(got, tt.want) {
+			if got := NewConf(tt.args.url, tt.args.bind, tt.args.password); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("newConf() = %v, want %v", got, tt.want)
 			}
 		})

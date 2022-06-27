@@ -47,3 +47,12 @@ func (operator *operator) Search() error {
 	result.PrettyPrint(1)
 	return nil
 }
+
+func (operator *operator) Delete() error {
+	err := getLDAP().Del(
+		ldap.NewDelRequest(fmt.Sprintf("cn=%v,cn=API,dc=test,dc=com", operator.Username), nil))
+	if err != nil {
+		return err
+	}
+	return nil
+}
