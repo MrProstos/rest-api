@@ -2,6 +2,7 @@ package db
 
 import (
 	"errors"
+	"fmt"
 )
 
 type Tables interface {
@@ -13,11 +14,11 @@ type Tables interface {
 }
 
 type client struct {
-	PhoneNum  string  `gorm:"primaryKey;unique;type:varchar;not null" json:"phone_num"`
-	Firstname string  `gorm:"type:varchar;not null" json:"firstname"`
-	Lastname  string  `gorm:"type:varchar;not null" json:"lastname"`
-	Birthday  string  `gorm:"type:date;not null" json:"birthday"`
-	Orders    []order `gorm:"foreignKey:PhoneNum" json:"orders"`
+	PhoneNum  string  `gorm:"primaryKey;unique;type:varchar;not null" json:"phone_num,omitempty"`
+	Firstname string  `gorm:"type:varchar;not null" json:"firstname,omitempty"`
+	Lastname  string  `gorm:"type:varchar;not null" json:"lastname,omitempty"`
+	Birthday  string  `gorm:"type:date;not null" json:"birthday,omitempty"`
+	Orders    []order `gorm:"foreignKey:PhoneNum" json:"orders,omitempty"`
 }
 
 func (client *client) isValid() error {
@@ -29,11 +30,17 @@ func (client *client) isValid() error {
 }
 
 func (client *client) Select() (Tables, error) {
+	fmt.Println(client)
 	if len(client.PhoneNum) == 0 {
 		return nil, errors.New("fields phone_num are required")
 	}
 
 	err := GetConn().Model(&client).Where("phone_num = ?", client.PhoneNum).First(&client)
+	if err.Error != nil {
+		return nil, err.Error
+	}
+
+	err = GetConn().Model(&order{}).Where("phone_num = ?", client.PhoneNum).Find(&client.Orders)
 	if err.Error != nil {
 		return nil, err.Error
 	}
@@ -55,13 +62,21 @@ func (client *client) Insert() (Tables, error) {
 }
 
 func (client *client) Update() (Tables, error) {
-	if err := client.isValid(); err != nil {
-		return nil, err
+	if len(client.PhoneNum) == 0 {
+		return nil, errors.New("fields phone_num are required")
 	}
 
 	err := GetConn().Model(&client).Where("phone_num = ?", client.PhoneNum).Updates(&client)
 	if err.Error != nil {
 		return nil, err.Error
+	}
+
+	for _, val := range client.Orders {
+		err = GetConn().Model(&val).Where("phone_num = ?", client.PhoneNum).Updates(&val)
+		if err.Error != nil {
+			return nil, err.Error
+		}
+
 	}
 
 	return client, nil
@@ -89,10 +104,10 @@ func NewClient() *client {
 
 type order struct {
 	ID       uint   `gorm:"primaryKey"`
-	PhoneNum string `gorm:"type:varchar;not null" json:"phone_num"`
-	To       string `json:"to"`
-	Body     string `json:"body"`
-	Status   uint   `gorm:"not null;default:1" json:"status"`
+	PhoneNum string `gorm:"type:varchar;not null" json:"phone_num,omitempty"`
+	To       string `json:"to,omitempty"`
+	Body     string `json:"body,omitempty"`
+	Status   uint   `gorm:"not null;default:1" json:"status,omitempty"`
 }
 
 func (order *order) isValid() error {
@@ -128,8 +143,8 @@ func (order *order) Insert() (Tables, error) {
 }
 
 func (order *order) Update() (Tables, error) {
-	if err := order.isValid(); err != nil {
-		return nil, err
+	if len(order.PhoneNum) == 0 {
+		return nil, errors.New("fields phone_num are required")
 	}
 
 	err := GetConn().Model(&order).Where("phone_num = ?", order.PhoneNum).Updates(&order)

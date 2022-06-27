@@ -6,9 +6,9 @@ import (
 )
 
 const (
-	url      string = "ldap://127.0.0.1:389"
-	bind     string = "cn=admin,dc=test,dc=com"
-	password string = "admin"
+	Url      string = "ldap://127.0.0.1:389"
+	Bind     string = "cn=admin,dc=test,dc=com"
+	Password string = "admin"
 )
 
 var conn *ldap.Conn
@@ -19,7 +19,7 @@ type conf struct {
 	password string
 }
 
-func newConf(url string, bind string, password string) *conf {
+func NewConf(url string, bind string, password string) *conf {
 	return &conf{url: url, bind: bind, password: password}
 }
 
@@ -37,6 +37,6 @@ func (conf *conf) Connect() error {
 	return nil
 }
 
-func GetLDAP() *ldap.Conn {
+func getLDAP() *ldap.Conn {
 	return conn
 }

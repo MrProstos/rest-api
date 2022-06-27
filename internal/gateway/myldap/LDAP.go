@@ -22,7 +22,7 @@ func (operator *operator) AddUser() error {
 	request.Attribute("sn", []string{operator.Username})
 	request.Attribute("userPassword", []string{operator.Password})
 
-	err := GetLDAP().Add(request)
+	err := getLDAP().Add(request)
 	if err != nil {
 		return err
 	}
@@ -30,7 +30,7 @@ func (operator *operator) AddUser() error {
 }
 
 func (operator *operator) Search() error {
-	result, err := GetLDAP().Search(ldap.NewSearchRequest(
+	result, err := getLDAP().Search(ldap.NewSearchRequest(
 		"cn=API,dc=test,dc=com",
 		ldap.ScopeWholeSubtree,
 		ldap.NeverDerefAliases,

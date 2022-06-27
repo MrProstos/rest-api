@@ -322,9 +322,9 @@ func Test_Tables_Update(t *testing.T) {
 			name: "Test - 1",
 			fileds: &client{
 				PhoneNum:  "89537648822",
-				Firstname: "UPDATE",
+				Firstname: "UPDATE1",
 				Lastname:  "UPDATE",
-				Birthday:  "2002-02-02",
+				Birthday:  "2022-11-2",
 				Orders:    nil,
 			},
 			wantErr: false,

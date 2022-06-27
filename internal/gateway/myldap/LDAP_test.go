@@ -48,7 +48,7 @@ func TestNewOperator(t *testing.T) {
 }
 
 func Test_operator_AddUser(t *testing.T) {
-	conf := newConf(url, bind, password)
+	conf := newConf(Url, Bind, Password)
 	err := conf.Connect()
 	if err != nil {
 		t.Fatal(err)
@@ -85,7 +85,7 @@ func Test_operator_AddUser(t *testing.T) {
 }
 
 func Test_operator_Search(t *testing.T) {
-	conf := newConf(url, bind, password)
+	conf := newConf(Url, Bind, Password)
 	err := conf.Connect()
 	if err != nil {
 		t.Fatal(err)
