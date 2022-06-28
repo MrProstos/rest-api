@@ -46,7 +46,7 @@ func (client *client) Select() (Tables, error) {
 		return nil, errors.New("fields phone_num are required")
 	}
 
-	err := GetConn().Model(&client).Where("phone_num = ?", client.PhoneNum).First(&client)
+	err := GetConn().Model(&client).Where("phone_num = ?", client.PhoneNum).Find(&client)
 	if err.Error != nil {
 		return nil, err.Error
 	}
@@ -121,6 +121,10 @@ func NewOrder() *order {
 	return &order{}
 }
 
+func NewArrayOrder() []order {
+	return []order{}
+}
+
 func SetArrayOrder(args ...*order) []order {
 	a := []order{}
 	for _, i := range args {
@@ -149,7 +153,7 @@ func (order *order) Select() (Tables, error) {
 		return nil, errors.New("fields phone_num are required")
 	}
 
-	err := GetConn().Where("phone_num = ?", order.PhoneNum).First(&order)
+	err := GetConn().Where("phone_num = ?", order.PhoneNum).Find(&order)
 	if err.Error != nil {
 		return nil, err.Error
 	}

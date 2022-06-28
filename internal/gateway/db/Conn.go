@@ -5,6 +5,7 @@ import (
 	_ "github.com/lib/pq"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
+	"log"
 )
 
 var db *gorm.DB
@@ -33,5 +34,8 @@ func NewDataBaseConfig() *dataBaseConfig {
 }
 
 func GetConn() *gorm.DB {
+	if db == nil {
+		log.Fatalln("db not connected")
+	}
 	return db
 }

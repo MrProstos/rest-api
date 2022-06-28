@@ -64,7 +64,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-Zz123456}
       PGDATA: /data/postgres
     volumes:
-      - ./dump_11-06-2022_22_55_59.sql:/docker-entrypoint-initdb.d/dump_11-06-2022_22_55_59.sql
+      - ./dump_28-06-2022_08_38_50.sql:/docker-entrypoint-initdb.d/dump_28-06-2022_08_38_50.sql
       - postgres:/data/postgres
     ports:
       - "5432:5432"

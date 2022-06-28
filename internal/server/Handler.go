@@ -9,6 +9,10 @@ import (
 
 func ShowClients(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
+	if vars == nil {
+		respondError(w, 400, "")
+		return
+	}
 
 	client := db.NewClient()
 	client.PhoneNum = vars["phone_num"]
@@ -76,16 +80,16 @@ func DelClient(w http.ResponseWriter, r *http.Request) {
 }
 
 func ShowOrder(w http.ResponseWriter, r *http.Request) {
-	order := db.NewOrder()
-
-	decode := json.NewDecoder(r.Body)
-	err := decode.Decode(&order)
-	if err != nil {
-		respondError(w, 500, err.Error())
+	vars := mux.Vars(r)
+	if vars == nil {
+		respondError(w, 400, "")
 		return
 	}
 
-	_, err = db.Tables.Select(order)
+	order := db.NewOrder()
+	order.PhoneNum = vars["phone_num"]
+
+	_, err := db.Tables.Select(order)
 	if err != nil {
 		respondError(w, 500, err.Error())
 		return

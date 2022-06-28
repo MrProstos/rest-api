@@ -38,5 +38,8 @@ func (conf *conf) Connect() error {
 }
 
 func getLDAP() *ldap.Conn {
+	if conn == nil {
+		log.Fatalln("db not connected")
+	}
 	return conn
 }
