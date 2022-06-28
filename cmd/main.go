@@ -1,16 +1,14 @@
 package main
 
 import (
-	"fmt"
+	"github.com/MrProstos/rest-api/internal/server"
 	"log"
 	"net/http"
-
-	"github.com/MrProstos/rest-api/internal/server"
 )
 
 func main() {
-	fmt.Println("Server starting!")
-	err := http.ListenAndServe(":2000", server.GetRouter())
+
+	err := http.ListenAndServe(":2000", server.NewServer().Init())
 	if err != nil {
 		log.Fatal(err)
 	}
